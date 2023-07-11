@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
+
+.form-container {
+    z-index: 2;
+}
+body {
+    background-color: rgba(0, 0, 0, 0.6);
+    font-family: "Raleway", sans-serif !important;
+
+    /* filter: blur(5px); */
+}
+.bg-flou {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    color: #CD1818;
+
+    background-image: url("/assets/img/back2.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1 !important;
+    filter: blur(15px);
+}

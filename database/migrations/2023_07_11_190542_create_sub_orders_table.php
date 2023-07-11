@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateSubOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('sub_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('login');
-            $table->string('password');
-            $table->integer('role');
+            $table->foreignId("order_id")->references("id")->on("orders")->onDelete("cascade");
+            $table->string("subcontractor");
+            $table->date("start_date");
+            $table->integer("status")->default(0);
+            $table->date("end_date");
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('sub_orders');
     }
 }

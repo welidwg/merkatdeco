@@ -25,6 +25,7 @@ class GovernorateController extends Controller
     public function create()
     {
         //
+        return view("governorates.create");
     }
 
     /**

@@ -14,10 +14,10 @@
         <ul id="accordionSidebar" class="navbar-nav text-light">
             <li class="nav-item">
                 <a class="nav-link  
-                     {{-- {{ Route::currentRouteName() == 'caissier.releves' ? 'active' : '' }} --}}
-                     " href="#"><i
-                        class="fas fa-file"></i><span>Vos
-                        relevés</span></a>
+                     {{ Route::currentRouteName() == 'tools.main' ? 'active' : '' }}
+                     "
+                    href="#">
+                    <i class="fas fa-tools" aria-hidden="true"></i><span>Outils</span></a>
 
             </li>
         </ul>

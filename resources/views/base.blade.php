@@ -55,6 +55,8 @@
                 @include('navbar')
                 <div class="p-2 p-md-3">
                     @section('content')
+                        <script>
+                        </script>
                     @show
                 </div>
             </div>
@@ -93,7 +95,6 @@
         },
 
     });
-    $("input").addClass("shadow-none");
 </script>
 
 </html>

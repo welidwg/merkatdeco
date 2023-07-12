@@ -16,12 +16,10 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string("title");
-            $table->float("price");
             $table->integer("stock");
             $table->foreignId("category_id")->references("id")->on("categories")->onDelete("cascade");
             $table->foreignId("sub_category_id")->references("id")->on("sub_categories")->onDelete("cascade")->nullable(true);
-            $table->json("colors")->nullable(true);
-            $table->string("measures");
+            $table->json("measures");
             $table->json("details")->nullable(true);
             $table->timestamps();
         });

@@ -17,9 +17,11 @@ class CreateSubOrdersTable extends Migration
             $table->id();
             $table->foreignId("order_id")->references("id")->on("orders")->onDelete("cascade");
             $table->string("subcontractor");
+            $table->double("phone");
+            $table->json("pieces");
             $table->date("start_date");
-            $table->integer("status")->default(0);
             $table->date("end_date");
+            $table->integer("status")->default(0);
             $table->timestamps();
         });
     }

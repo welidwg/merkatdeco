@@ -29,7 +29,7 @@ Route::get("/tools", function () {
     return view("pages.tools");
 })->name("tools.main");
 
-
+Route::get(("/categories/subs/{id}"), [CategoryController::class, "getSubs"])->name("categories.getSubs");
 Route::resource("categories", CategoryController::class);
 Route::resource("governorates", GovernorateController::class);
 Route::resource("products", ProductController::class);

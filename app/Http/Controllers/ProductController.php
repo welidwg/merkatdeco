@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,8 @@ class ProductController extends Controller
     public function create()
     {
         //
-        return view("products.create");
+        $categs = Category::with("sub_categs")->get();
+        return view("products.create", compact("categs"));
     }
 
     /**
@@ -37,6 +39,14 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            $data = [];
+            $data = $request->all();
+            Product::create($data);
+            return response(json_encode(["success" => "done"]), 201);
+        } catch (\Throwable $th) {
+            return response(json_encode(["error" => $th->getMessage()]), 500);
+        }
     }
 
     /**

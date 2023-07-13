@@ -60,9 +60,9 @@
         </div>
         <div class="row col-12 col-md-6 flex-column " id="subcommand" style="display: none;border-left: 1px solid #ccc">
             <hr class="d-lg-none">
-            <div class="col-md-3"><span class="fw-bold">Sous commande <a id="add_subOrder"><i class="fas fa-plus-circle"
-                            aria-hidden="true"></i></a></span></div> <br>
-            <div class="row w-100 " id="subCommandContent">
+            <div class="col-md-3"><span class="fw-bold">Sous commande <a id="add_subOrder" class="text-primary"><i
+                            class="fas fa-plus-circle" aria-hidden="true"></i></a></span></div> <br>
+            <div class="row  subCommandContent" id="subCommandContent">
                 <div class="col-6 col-md-4">
                     <div class="mb-3">
                         <label for="" class="form-label">Sous traitant</label>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="col-12">
                     <div class="mb-3 text-size-md">
-                        <label for="" class="form-label">Pièces <a id="add_piece"><i
+                        <label for="" class="form-label">Pièces <a id="add_piece" class="text-primary"><i
                                     class="fas fa-plus-circle" aria-hidden="true"></i></a></label>
                         <div class="row">
                             <div class="col-6 col-md-8">
@@ -125,7 +125,7 @@
         $('#piece_container').append(`
          <div class="row">
                             <div class="col-6 col-md-8">
-                                <input type="text" name="pieces[]" placeholder="pièce ${$(".pieceInput").length+1}"
+                                <input type="text" name="pieces[]" placeholder="pièce "
                                     class="form-control shadow-none text-size-md pieceInput mb-3" >
                             </div>
                             <div class="col-6 col-md-4">
@@ -141,9 +141,11 @@
     })
 
     $("#add_subOrder").on('click', () => {
+        let len = $(".subCommandContent").length;
+        console.log(len);
         $("#subCommandContent").append(`
-        <div  class="row w-100 text-size-md" style="width:100%;">
-            <hr >
+        <div  class="row w-100 subCommandContent text-size-md" >
+            <hr style="border:2px solid black">
                   <a  onclick="RemoveParentt(this)"  class="text-end"><i class="fa fa-times" "></i></a>
 
                 <div class="col-6 col-md-4">
@@ -166,7 +168,7 @@
                 </div>
                 <div class="col-12">
                     <div class="mb-3 text-size-md">
-                        <label for="" class="form-label">Pièces <a id="add_piece"><i
+                        <label for="" class="form-label ">Pièces <a onclick="add_piece('piece_container${len+1}')" class="text-primary"><i
                                     class="fas fa-plus-circle" aria-hidden="true"></i></a></label>
                         <div class="row">
                             <div class="col-6 col-md-8">
@@ -179,11 +181,31 @@
                             </div>
                         </div>
 
-                        <div id="piece_container text-size-md"></div>
+                        <div id="piece_container${len+1}" class="text-size-md"></div>
                     </div>
                 </div></div>
         `)
     })
+
+    function add_piece(id) {
+        let len = $(".subCommandContent").length;
+
+        $(`#${id}`).append(`
+         <div class="row">
+                            <div class="col-6 col-md-8">
+                                <input type="text" name="pieces[]" placeholder="pièce"
+                                    class="form-control shadow-none text-size-md pieceInput mb-3" >
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="input-group ">
+                                     <input type="number" min="1" name="qte[]" placeholder="quantité" class="form-control text-size-md shadow-none qteInput mb-3" />
+
+                                      <span onclick="RemoveParent(this)" class="mx-auto"><i class="fas fa-times" aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+          </div>
+`)
+    }
 
     function RemoveParent(e) {
         $(e).parent().parent().parent().remove()

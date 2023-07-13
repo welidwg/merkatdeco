@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Governorate extends Model
 {
     use HasFactory;
+    protected $fillable = ["label"];
 }

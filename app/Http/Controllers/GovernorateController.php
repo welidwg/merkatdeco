@@ -36,7 +36,22 @@ class GovernorateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $label = $request->label;
+            if (str_contains($label, ',')) {
+                $arr = explode(",", $label);
+                foreach ($arr as $gov) {
+                    if ($gov != "") {
+                        Governorate::create(["label" => $gov]);
+                    }
+                }
+                return response(json_encode(["success" => "done"]), 201);
+            }
+            $gov = Governorate::create($request->all());
+            return response(json_encode(["success" => "done"]), 201);
+        } catch (\Throwable $th) {
+            return response(json_encode(["error" => $th->getMessage()]), 500);
+        }
     }
 
     /**

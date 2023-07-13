@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -37,6 +38,23 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            $categ = Category::create($request->all());
+            $id = $categ->id;
+            if ($request->exists("subCateg")) {
+                foreach ($request->input("subCateg") as $sub) {
+                    if ($sub !== null)
+                        SubCategory::create([
+                            "label" => $sub,
+                            "category_id" => $id
+                        ]);
+                    # code...
+                }
+            }
+            return response(json_encode(["success" => "done"]), 201);
+        } catch (\Throwable $th) {
+            return response(json_encode(["error" => $th->getMessage()]), 500);
+        }
     }
 
     /**
@@ -82,5 +100,11 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         //
+    }
+
+    function getSubs($id)
+    {
+        $cat = Category::where("id", $id)->first();
+        return json_encode($cat->sub_categs);
     }
 }

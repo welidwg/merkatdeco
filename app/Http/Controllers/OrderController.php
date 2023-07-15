@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Governorate;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\Status;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -14,7 +17,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::all();
+        return view("orders.index", compact('orders'));
     }
 
     /**
@@ -24,7 +28,11 @@ class OrderController extends Controller
      */
     public function create()
     {
-        return view("orders.create");
+        $govs = Governorate::all();
+        $prods = Product::all();
+        $status = Status::all();
+
+        return view("orders.create", ["govs" => $govs, "prods" => $prods, "status" => $status]);
     }
 
     /**
@@ -36,6 +44,12 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            Order::create($request->all());
+            return response(json_encode(["success" => "done"]), 201);
+        } catch (\Throwable $th) {
+            return response(json_encode(["error" => $th->getMessage()]), 500);
+        }
     }
 
     /**
@@ -69,7 +83,12 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        try {
+            $order->update($request->all());
+            return response(json_encode(["success" => "done"]), 200);
+        } catch (\Throwable $th) {
+            return response(json_encode(["error" => $th->getMessage()]), 500);
+        }
     }
 
     /**

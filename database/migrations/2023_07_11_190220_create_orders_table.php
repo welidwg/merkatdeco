@@ -20,8 +20,7 @@ class CreateOrdersTable extends Migration
             $table->string("address");
             $table->integer("phone");
             $table->json("products");
-            $table->string("details")->nullable();
-            $table->integer("status")->default(0);
+            $table->text("details")->nullable();
             $table->date("order_date");
             $table->date("delivery_date")->nullable();
             $table->timestamps();

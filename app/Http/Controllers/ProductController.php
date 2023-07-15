@@ -16,6 +16,8 @@ class ProductController extends Controller
     public function index()
     {
         //
+        $prods = Product::all();
+        return view("products.index", compact("prods"));
     }
 
     /**
@@ -80,7 +82,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        try {
+            $product->update($request->all());
+            return response(json_encode(["success" => "done"]), 200);
+        } catch (\Throwable $th) {
+            return response(json_encode(["error" => $th->getMessage()]), 500);
+        }
     }
 
     /**
@@ -91,6 +98,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        try {
+            $product->delete();
+            return response(json_encode(["success" => "done"]), 200);
+        } catch (\Throwable $th) {
+            return response(json_encode(["error" => $th->getMessage()]), 500);
+        }
     }
 }

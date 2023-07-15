@@ -14,12 +14,29 @@
         <ul id="accordionSidebar" class="navbar-nav text-light">
             <li class="nav-item">
                 <a class="nav-link  
+                     {{ Route::currentRouteName() == 'products.index' ? 'active' : '' }}
+                     "
+                    href="{{ route('products.index') }}">
+                    <i class="fas fa-clipboard-list"></i><span>Produits</span></a>
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  
+                     {{ Route::currentRouteName() == 'orders.index' ? 'active' : '' }}
+                     "
+                    href="{{ route('orders.index') }}">
+                    <i class="fas fa-clipboard-list"></i><span>Commandes</span></a>
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  
                      {{ Route::currentRouteName() == 'tools.main' ? 'active' : '' }}
                      "
-                    href="#">
+                    href="{{ route('tools.main') }}">
                     <i class="fas fa-tools" aria-hidden="true"></i><span>Outils</span></a>
 
             </li>
+
         </ul>
         {{-- <div class="text-center d-none d-md-inline">
             <button id="sidebarToggle" class="btn rounded-circle border-0" type="button"></button>

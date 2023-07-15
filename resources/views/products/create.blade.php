@@ -88,11 +88,11 @@
                 <div class="row" id="measures_content">
                     <div class=" row mb-3">
                         <div class="col-7">
-                            <input type="text" placeholder="ex: 181 x 106 cm" name="measures[]"
+                            <input type="text" placeholder="ex: 181 x 106 cm" name="measuresArr[]"
                                 class="form-control shadow-none" id="">
                         </div>
                         <div class="col-5">
-                            <input type="number" step="0.1" placeholder="prix" min="0" name="prices[]"
+                            <input type="number" step="0.1" placeholder="prix" min="0" name="pricesArr[]"
                                 class="form-control shadow-none" id="">
                         </div>
                     </div>
@@ -117,7 +117,7 @@
     <button type="submit" class="btn btn-primary float-end" id="add_btn_prod" disabled>Ajouter</button>
 </form>
 <script>
-    $("input,select,option,label,a").addClass("shadow-none text-size-md");
+    $("input,select,option,label").addClass("shadow-none text-size-md");
 
     function RemoveParent(e) {
         $(e).parent().parent().parent().remove()
@@ -144,13 +144,13 @@
         $('#measures_content').append(`
   <div class=" row ">
                      <div class="col-7">
-                        <input type="text" placeholder="ex: 181 x 106 cm" name="measures[]"
+                        <input type="text" placeholder="ex: 181 x 106 cm" name="measuresArr[]"
                             class="form-control shadow-none text-size-md" id="">
                     </div>
                     <div class="col-5">
                        
                             <div class="input-group mb-3"  >
-  <input type="number" step="0.1" placeholder="prix" min="0" name="prices[]"
+  <input type="number" step="0.1" placeholder="prix" min="0" name="pricesArr[]"
                             class="form-control text-size-md shadow-none" id="">
   <span onclick="RemoveParent(this)" class="input-group-text text-size-md"><a  ><i class="fas fa-times" aria-hidden="true"></i></a></span>
 </div>
@@ -164,16 +164,15 @@
 
         var attributeInputs = document.getElementsByName('attributes[]');
         var valueInputs = document.getElementsByName('values[]');
-        var measuresInputs = document.getElementsByName('measures[]');
-        var pricesInputs = document.getElementsByName('prices[]');
-        var mergedDetailsArray = null;
-        var mergedMeasuressArray = null;
+        var measuresInputs = document.getElementsByName('measuresArr[]');
+        var pricesInputs = document.getElementsByName('pricesArr[]');
+        var mergedDetailsArray = [];
+        var mergedMeasuressArray = [];
 
         for (var i = 0; i < attributeInputs.length; i++) {
             var attributeValue = attributeInputs[i].value;
             var valueValue = valueInputs[i].value;
             if (attributeValue != "" && valueValue != "") {
-                mergedDetailsArray = []
                 mergedDetailsArray.push({
                     attribute: attributeValue,
                     value: valueValue
@@ -185,7 +184,6 @@
             var priceValue = pricesInputs[i].value;
 
             if (measureValue != "" && priceValue != "") {
-                mergedMeasuressArray = []
                 mergedMeasuressArray.push({
                     measure: measureValue,
                     price: priceValue
@@ -200,6 +198,9 @@
             .then(res => {
                 $("#addProdForm").trigger("reset")
                 Swal.fire('Succès', "Le produit est bien ajouté.", "success")
+                console.log('====================================');
+                console.log(res);
+                console.log('====================================');
 
             })
             .catch(err => {

@@ -162,6 +162,32 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
+                                            <label for="" class="form-label">Couleurs <a
+                                                    id="add_color{{ $prod->id }}"><i class="fas fa-plus"
+                                                        aria-hidden="true"></i></a></label>
+                                            <div class="row" id="colors_content{{ $prod->id }}">
+
+                                                @foreach (json_decode($prod->colors) as $color)
+                                                    <div class="col-lg-4 mb-3">
+                                                        <div class="input-group mb-1">
+
+                                                            <input type="text" name="colorsArr{{ $prod->id }}[]"
+                                                                class="form-control text-size-md shadow-none"
+                                                                value="{{ $color->color }}" id="">
+                                                            <span onclick="RemoveParentColor(this)"
+                                                                class="input-group-text text-size-md"><a><i
+                                                                        class="fas fa-times"
+                                                                        aria-hidden="true"></i></a></span>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
                                             <label for="" class="form-label">Caractéristiques <a
                                                     id="add_attr{{ $prod->id }}"><i class="fas fa-plus"
                                                         aria-hidden="true"></i></a></label>
@@ -210,8 +236,10 @@
                             var valueInputs = document.getElementsByName('values{{ $prod->id }}[]');
                             var measuresInputs = document.getElementsByName('measuresArr{{ $prod->id }}[]');
                             var pricesInputs = document.getElementsByName('pricesArr{{ $prod->id }}[]');
+                            var colorsInputs = document.getElementsByName('colorsArr{{ $prod->id }}[]');
                             var mergedDetailsArray = [];
                             var mergedMeasuressArray = [];
+                            var mergedColorsArray = [];
 
                             for (var i = 0; i < attributeInputs.length; i++) {
                                 var attributeValue = attributeInputs[i].value;
@@ -220,6 +248,14 @@
                                     mergedDetailsArray.push({
                                         attribute: attributeValue,
                                         value: valueValue
+                                    });
+                                }
+                            }
+                            for (var i = 0; i < colorsInputs.length; i++) {
+                                var color = colorsInputs[i].value;
+                                if (color != "") {
+                                    mergedColorsArray.push({
+                                        color: color,
                                     });
                                 }
                             }
@@ -238,8 +274,8 @@
                             var formdata = new FormData($("#editProdForm{{ $prod->id }}")[0]);
                             formdata.append("measures", JSON.stringify(mergedMeasuressArray))
                             formdata.append("details", JSON.stringify(mergedDetailsArray))
+                            formdata.append("colors", JSON.stringify(mergedColorsArray))
 
-                            console.log([...formdata]);
                             axios.post("{{ route('products.update', $prod) }}", formdata, {
                                     headers: {
                                         'Content-Type': 'multipart/form-data'
@@ -278,6 +314,29 @@
                    </div>
 `)
                         })
+
+
+
+                        $("#add_color{{ $prod->id }}").on("click", (e) => {
+                            $('#colors_content{{ $prod->id }}').append(`
+    <div class="col-lg-4 mb-3">
+                                                        <div class="input-group mb-1">
+
+                                                            <input type="text" name="colorsArr{{ $prod->id }}[]"
+                                                                class="form-control text-size-md shadow-none" placeholder="couleur"
+                                                                value="" id="">
+                                                            <span onclick="RemoveParentColor(this)"
+                                                                class="input-group-text text-size-md"><a><i
+                                                                        class="fas fa-times"
+                                                                        aria-hidden="true"></i></a></span>
+                                                        </div>
+                                                    </div>
+`)
+                        })
+
+
+
+
                         $("#add_attr{{ $prod->id }}").on("click", (e) => {
                             $("#attr_content{{ $prod->id }}").append(`
           <div class=" row ">
@@ -304,6 +363,10 @@
     <script>
         function RemoveParent(e) {
             $(e).parent().parent().parent().remove()
+        }
+
+        function RemoveParentColor(e) {
+            $(e).parent().parent().remove()
         }
     </script>
 @endsection

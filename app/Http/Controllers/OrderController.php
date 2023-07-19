@@ -18,7 +18,9 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::all();
-        return view("orders.index", compact('orders'));
+        $status = Status::all();
+
+        return view("orders.index", compact("orders", "status"));
     }
 
     /**
@@ -100,5 +102,11 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
+        try {
+            $order->delete();
+            return response(json_encode(["success" => "done"]), 200);
+        } catch (\Throwable $th) {
+            return response(json_encode(["error" => $th->getMessage()]), 500);
+        }
     }
 }

@@ -36,6 +36,12 @@ class SubOrderController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            SubOrder::create($request->all());
+            return response(json_encode(["success" => "done"]), 201);
+        } catch (\Throwable $th) {
+            return response(json_encode(["error" => $th->getMessage()]), 500);
+        }
     }
 
     /**
@@ -69,17 +75,33 @@ class SubOrderController extends Controller
      */
     public function update(Request $request, SubOrder $subOrder)
     {
-        //
+        try {
+            $id = $request->sub_id;
+            $sub = SubOrder::find($id);
+            $sub->update($request->all());
+            return response(json_encode(["success" => "done"]), 200);
+        } catch (\Throwable $th) {
+            return response(json_encode(["error" => $th->getMessage()]), 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\SubOrder  $subOrder
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SubOrder $subOrder)
+    public function destroy(Request $request, SubOrder $subOrder)
     {
-        //
+        return response(json_encode(["success" => $request->all()]), 200);
+    }
+
+    public function delete(Request $req, $id)
+    {
+        $sub = SubOrder::find($id);
+        $sub->delete();
+
+        return response(json_encode(["success" => "done"]), 200);
     }
 }

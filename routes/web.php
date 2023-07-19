@@ -5,6 +5,8 @@ use App\Http\Controllers\GovernorateController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\SubOrderController;
+use App\Models\SubOrder;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +21,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.main');
+});
+Route::get('/csrf', function () {
+    return csrf_token();
 });
 Route::get('/main', function () {
     return view('pages.main');
@@ -35,4 +40,6 @@ Route::resource("categories", CategoryController::class);
 Route::resource("governorates", GovernorateController::class);
 Route::resource("products", ProductController::class);
 Route::resource("orders", OrderController::class);
+Route::delete("/suborder/delete/{id}", [SubOrderController::class, "delete"])->name("sub.delete");
+Route::resource("suborders", SubOrderController::class);
 Route::resource("status", StatusController::class);

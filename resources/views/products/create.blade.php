@@ -43,6 +43,7 @@
                             axios.get(`/categories/subs/${selectedOption.val()}`)
                                 .then(res => {
                                     if (res.data.length > 0) {
+                                        $("#subCategsSelect").html("")
                                         $("#subCategsSelect").removeAttr("disabled");
                                         res.data.forEach(element => {
                                             var optionValue = element.id;
@@ -102,6 +103,19 @@
         </div>
         <div class="col-md-12">
             <div class="mb-3">
+                <label for="" class="form-label">Couleurs <a id="add_color"><i class="fas fa-plus"
+                            aria-hidden="true"></i></a></label>
+                <div class="row" id="colors_content">
+                    <div class="col-md-4 mb-3">
+                        <input type="text" placeholder="couleur" name="colorsArr[]" class="form-control shadow-none"
+                            id="">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="mb-3">
                 <label for="" class="form-label">Caractéristiques <a id="add_attr"><i class="fas fa-plus"
                             aria-hidden="true"></i></a></label>
                 <div class="row" id="attr_content">
@@ -121,6 +135,10 @@
 
     function RemoveParent(e) {
         $(e).parent().parent().parent().remove()
+    }
+
+    function RemoveParentColor(e) {
+        $(e).parent().parent().remove()
     }
     $("#add_attr").on("click", (e) => {
         $("#attr_content").append(`
@@ -159,6 +177,20 @@
 `)
     })
 
+    $("#add_color").on("click", (e) => {
+        $('#colors_content').append(`
+<div class="col-md-4 mb-3">
+    
+                            <div class="input-group mb-3"  >
+   <input type="text" placeholder="couleur" name="colorsArr[]" class="form-control shadow-none"
+                            id="">
+  <span onclick="RemoveParentColor(this)" class="input-group-text text-size-md"><a  ><i class="fas fa-times" aria-hidden="true"></i></a></span>
+</div>
+                       
+                    </div>
+`)
+    })
+
     $("#addProdForm").on('submit', (e) => {
         e.preventDefault();
 
@@ -166,8 +198,10 @@
         var valueInputs = document.getElementsByName('values[]');
         var measuresInputs = document.getElementsByName('measuresArr[]');
         var pricesInputs = document.getElementsByName('pricesArr[]');
+        var colorsInputs = document.getElementsByName('colorsArr[]');
         var mergedDetailsArray = [];
         var mergedMeasuressArray = [];
+        var mergedColorsArray = [];
 
         for (var i = 0; i < attributeInputs.length; i++) {
             var attributeValue = attributeInputs[i].value;
@@ -191,9 +225,18 @@
             }
 
         }
+        for (var i = 0; i < colorsInputs.length; i++) {
+            var colorVal = colorsInputs[i].value;
+            if (colorVal != "") {
+                mergedColorsArray.push({
+                    color: colorVal,
+                });
+            }
+        }
         let formdata = new FormData($("#addProdForm")[0]);
         formdata.append("measures", JSON.stringify(mergedMeasuressArray))
         formdata.append("details", JSON.stringify(mergedDetailsArray))
+        formdata.append("colors", JSON.stringify(mergedColorsArray))
         axios.post("{{ route('products.store') }}", formdata)
             .then(res => {
                 $("#addProdForm").trigger("reset")

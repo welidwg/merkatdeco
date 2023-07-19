@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ["client", "governorate_id", "address", "phone", "products", "details", "status_id", "order_date", "delivery_date"];
+    protected $fillable = ["client", "governorate_id", "address", "phone", "products", "details", "source", "status_id",  "order_date", "delivery_date"];
 
 
     public function governorate(): BelongsTo

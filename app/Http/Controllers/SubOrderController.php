@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\Status;
 use App\Models\SubOrder;
 use Illuminate\Http\Request;
 
@@ -78,7 +80,32 @@ class SubOrderController extends Controller
         try {
             $id = $request->sub_id;
             $sub = SubOrder::find($id);
-            $sub->update($request->all());
+            $data = $request->all();
+            $status = Status::find($request->status_id);
+            if ($status->label == "Prête") {
+                $data["end_date"] = date("Y-m-d");
+                $count = count($sub->order->sub_orders);
+                if ($count == 1) {
+                    $sub->order->update(["status_id" => $request->status_id]);
+                } else {
+                    $i = 0;
+                    foreach ($sub->order->sub_orders as $sb) {
+                        if ($sb->status_id == $status->id) $i++;
+                    }
+                    if ($i == $count - 1) {
+                        $sub->order->update(["status_id" => $request->status_id]);
+                        foreach (json_decode($sub->order->products) as $prod) {
+                            $pr = Product::find($prod->id);
+                            if ($pr) {
+                                $qte = $prod->qte;
+                                $pr->stock += $qte;
+                                $pr->save();
+                            }
+                        }
+                    }
+                }
+            }
+            $sub->update($data);
             return response(json_encode(["success" => "done"]), 200);
         } catch (\Throwable $th) {
             return response(json_encode(["error" => $th->getMessage()]), 500);

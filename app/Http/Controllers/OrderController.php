@@ -87,6 +87,17 @@ class OrderController extends Controller
     {
         try {
             $order->update($request->all());
+            $status = Status::find($request->status_id);
+            if ($status && $status->label == "Prête") {
+                foreach (json_decode($order->products) as $prod) {
+                    $pr = Product::find($prod->id);
+                    if ($pr) {
+                        $qte = $prod->qte;
+                        $pr->stock += $qte;
+                        $pr->save();
+                    }
+                }
+            }
             return response(json_encode(["success" => "done"]), 200);
         } catch (\Throwable $th) {
             return response(json_encode(["error" => $th->getMessage()]), 500);

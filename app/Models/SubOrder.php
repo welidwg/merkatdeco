@@ -15,4 +15,9 @@ class SubOrder extends Model
     {
         return $this->belongsTo(Status::class, "status_id");
     }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, "order_id");
+    }
 }

@@ -172,7 +172,9 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <label for="" class="form-label">Status</label>
+                                                    <label for="" class="form-label">Status <i
+                                                            class="fas fa-circle text-{{ $order->status->class }}"
+                                                            aria-hidden="true" style="font-size: 9px"></i></label>
                                                     <select class="form-select " id="status_select" name="status_id">
                                                         @php
                                                             $statuss = Status::where('id', '!=', $order->status->id)->get();
@@ -308,7 +310,6 @@
                                             axios.post("{{ route('orders.update', $order) }}", formdata)
                                                 .then(res => {
                                                     Swal.fire("Succès", "Commande bien modifié", "success")
-                                                    // console.log(res.data.success)
                                                     setTimeout(() => {
                                                         window.location.reload()
                                                     }, 700);
@@ -361,7 +362,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-3">
-                                            <label for="" class="form-label">Date du commande</label>
+                                            <label for="" class="form-label">Date du prestation</label>
                                             <input type="date" name="start_date" class="form-control shadow-none"
                                                 id="">
                                         </div>
@@ -451,6 +452,9 @@
                                     $("#add_subordr_form_{{ $order->id }}").trigger("reset");
                                     $("#piece_container{{ $order->id }}").html("")
                                     Swal.fire("Succès", "Prestation bien enregistré", "success")
+                                    setTimeout(() => {
+                                        window.location.reload()
+                                    }, 700);
                                 })
                                 .catch(err => {
                                     console.error(err.response.data);
@@ -508,7 +512,7 @@
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label for="" class="form-label">Date du commande</label>
+                                                    <label for="" class="form-label">Date du prestation</label>
                                                     <input type="date"
                                                         value="{{ date('Y-m-d', strtotime($sub->start_date)) }}"
                                                         name="start_date" class="form-control shadow-none"
@@ -518,16 +522,23 @@
 
                                             <div class="col-lg-12">
                                                 <div class="mb-3">
-                                                    <label for="" class="form-label">Status</label>
+                                                    <label for="" class="form-label">Status
+                                                        <i class="fas fa-circle text-{{ $sub->status->class }}"
+                                                            aria-hidden="true" style="font-size: 9px"></i>
+                                                    </label>
                                                     <select class="form-select " id="" name="status_id">
                                                         @php
-                                                            $statuss = Status::where('id', '!=', $sub->status->id)->get();
+                                                            $statuss = Status::where('id', '!=', $sub->status->id)
+                                                                ->orderBy('class', 'desc')
+                                                                ->get();
                                                         @endphp
-                                                        <option selected value="{{ $sub->status->id }}">
+                                                        <option selected value="{{ $sub->status->id }}"
+                                                            class="text-{{ $sub->status->class }}">
                                                             {{ $sub->status->label }}
                                                         </option>
                                                         @foreach ($statuss as $item)
-                                                            <option value="{{ $item->id }}">
+                                                            <option value="{{ $item->id }}"
+                                                                class="text-{{ $item->class }}">
                                                                 {{ $item->label }}
                                                             </option>
                                                         @endforeach
@@ -624,7 +635,9 @@
                                             .then(res => {
                                                 // $("#piece_container{{ $sub->id }}").html("")
                                                 Swal.fire("Succès", "Prestation bien enregistrée", "success")
-                                                console.log(res.data);
+                                                setTimeout(() => {
+                                                    window.location.reload()
+                                                }, 700);
                                             })
                                             .catch(err => {
                                                 console.error(err.response.data);
@@ -646,5 +659,6 @@
         function RemoveParent(e) {
             $(e).parent().parent().parent().remove()
         }
+        $("input,select,option,label").addClass("shadow-none text-size-md");
     </script>
 @endsection

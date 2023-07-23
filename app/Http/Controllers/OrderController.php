@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Delivery;
 use App\Models\Governorate;
 use App\Models\Order;
 use App\Models\Product;
@@ -86,8 +87,14 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         try {
+            $old_status = $order->status->label;
             $order->update($request->all());
             $status = Status::find($request->status_id);
+            if ($old_status != $status->label) {
+                if ($old_status == "Livrée") {
+                    $order->delivery->delete();
+                }
+            }
             if ($status && $status->label == "Prête") {
                 foreach (json_decode($order->products) as $prod) {
                     $pr = Product::find($prod->id);

@@ -14,6 +14,14 @@
         <ul id="accordionSidebar" class="navbar-nav text-light">
             <li class="nav-item">
                 <a class="nav-link  
+                     {{ Route::currentRouteName() == 'main' ? 'active' : '' }}
+                     "
+                    href="{{ route('main') }}">
+                    <i class="fas fa-home"></i><span>Accueil</span></a>
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  
                      {{ Route::currentRouteName() == 'products.index' ? 'active' : '' }}
                      "
                     href="{{ route('products.index') }}">

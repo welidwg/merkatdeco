@@ -1,9 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ysabeau+Infant&display=swap");
 body {
     background-color: rgba(0, 0, 0, 0.6);
-    font-family: "Lato", sans-serif;
-
-    /* filter: blur(5px); */
+    font-family: "Ysabeau Infant", sans-serif; /* filter: blur(5px); */
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {

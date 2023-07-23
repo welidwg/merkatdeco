@@ -1,6 +1,6 @@
 @extends('base')
 @section('title')
-    Commandes
+    Livraisons
 @endsection
 @php
     use App\Models\Product;
@@ -10,7 +10,7 @@
 @section('content')
     <div class="card shadow text-size-md">
         <div class="card-header py-3 d-flex align-items-center justify-content-start">
-            <p class="text-primary m-0 fw-bold"> Commandes
+            <p class="text-primary m-0 fw-bold"> Commandes prête
 
             </p>
         </div>
@@ -19,7 +19,6 @@
                 <table class="table my-0 " id="table_index_releve" style="table-layout: auto">
                     <thead>
                         <tr>
-                            <th></th>
                             <th>#Id</th>
                             <th>Status</th>
                             <th>Source</th>
@@ -34,20 +33,8 @@
                     <tbody>
                         @foreach ($orders as $order)
                             <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input"
-                                            {{ $order->status->label != 'Prête' ? 'disabled' : '' }} type="checkbox"
-                                            name="deliveries[]" value="{{ $order->id }}"
-                                            status='{{ $order->status->label }}'>
-
-                                    </div>
-                                </td>
-                                <td class="fw-bold ">
-                                    #{{ $order->id }}
-                                </td>
-                                <td>
-                                    <span
+                                <td class="fw-bold">#{{ $order->id }}</td>
+                                <td><span
                                         class="badge bg-{{ $order->status->class }} text-size-md">{{ $order->status->label }}</span>
                                 </td>
                                 <td class="">{{ $order->source }}</td>
@@ -342,10 +329,7 @@
 
                     </tbody>
                 </table>
-                <div class="p-3 float-end">
-                    <button type="button" style="display: none" id="add_delivery"
-                        class="btn btn-primary text-size-md">Livraison</button>
-                </div>
+
                 @foreach ($orders as $order)
                     {{-- offcanvas new suborder --}}
 
@@ -682,51 +666,9 @@
         </div>
     </div>
     <script>
-        $(document).ready(function() {
-            function RemoveParent(e) {
-                $(e).parent().parent().parent().remove()
-            }
-
-            $("input,select,option,label").addClass("shadow-none text-size-md");
-
-
-            $('input[name="deliveries[]"]').on('change', function() {
-                var checkedCount = $('input[name="deliveries[]"]:checked').length;
-
-                if (checkedCount > 0) {
-                    $("#add_delivery").fadeIn()
-                } else
-                    $("#add_delivery").fadeOut()
-
-            });
-
-
-            $("#add_delivery").on("click", (e) => {
-                var ids = [];
-                $('input[name="deliveries[]"]:checked').each((e, v) => {
-                    let attr = v.getAttribute("status");
-                    if (attr != "Livrée")
-                        ids.push(v.value)
-
-                })
-                if (ids.length != 0) {
-                    axios.post("{{ route('deliveries.store') }}", {
-                            orders: ids
-                        })
-                        .then(res => {
-                            setTimeout(() => {
-                                window.location.reload()
-                            }, 700);
-                        })
-                        .catch(err => {
-                            console.error(err.response.data);
-                        })
-                } else {
-                    Swal.fire("Rien à Mettre à Jour", "Ces commandes sont déjà livrées", "warning")
-                }
-
-
-            })
-        })
+        function RemoveParent(e) {
+            $(e).parent().parent().parent().remove()
+        }
+        $("input,select,option,label").addClass("shadow-none text-size-md");
     </script>
 @endsection

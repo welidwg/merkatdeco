@@ -22,13 +22,13 @@ Route::get("/optimize", function () {
 });
 Route::get('/', function () {
     return redirect()->to("/main");
-})->name("main");
+});
 Route::get('/csrf', function () {
     return csrf_token();
 });
 Route::get('/main', function () {
     return view('pages.main');
-});
+})->name("main");;
 
 //dashboard
 Route::get("/tools", function () {

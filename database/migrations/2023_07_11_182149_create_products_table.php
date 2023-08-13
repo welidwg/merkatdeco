@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             $table->text("measures");
             $table->text("colors");
             $table->text("details")->nullable(true);
-            // $table->timestamps();
+            $table->timestamps();
         });
     }
 

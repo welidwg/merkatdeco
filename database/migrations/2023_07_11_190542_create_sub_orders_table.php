@@ -18,7 +18,7 @@ class CreateSubOrdersTable extends Migration
             $table->foreignId("order_id")->references("id")->on("orders")->onDelete("cascade");
             $table->string("subcontractor");
             $table->double("phone")->nullable();
-            $table->json("pieces");
+            $table->text("pieces");
             $table->date("start_date");
             $table->date("end_date")->nullable();
             $table->foreignId("status_id")->nullable()->references("id")->on("status")->onDelete("cascade");

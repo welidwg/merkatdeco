@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId("governorate_id")->references("id")->on("governorates")->onDelete("cascade");
             $table->string("address");
             $table->integer("phone");
-            $table->json("products");
+            $table->text("products");
             $table->text("details")->nullable();
             $table->date("order_date");
             $table->date("delivery_date")->nullable();

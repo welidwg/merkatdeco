@@ -19,7 +19,10 @@ class Order extends Model
     public static function countReady()
     {
         $status = Status::where("label", "Prête")->first();
-        return self::where('status_id', $status->id)->count();
+        if ($status) {
+            return self::where('status_id', $status->id)->count();
+        }
+        return [];
     }
 
     public function governorate(): BelongsTo

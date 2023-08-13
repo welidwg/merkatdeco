@@ -19,9 +19,9 @@ class CreateProductsTable extends Migration
             $table->integer("stock")->default(0);
             $table->foreignId("category_id")->references("id")->on("categories")->onDelete("cascade");
             $table->foreignId("sub_category_id")->default(null)->nullable()->references("id")->on("sub_categories")->onDelete("cascade");
-            $table->json("measures");
-            $table->json("colors");
-            $table->json("details")->nullable(true);
+            $table->text("measures");
+            $table->text("colors");
+            $table->text("details")->nullable(true);
             // $table->timestamps();
         });
     }

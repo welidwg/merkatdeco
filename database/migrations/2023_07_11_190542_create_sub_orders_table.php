@@ -21,7 +21,6 @@ class CreateSubOrdersTable extends Migration
             $table->text("pieces");
             $table->date("start_date");
             $table->date("end_date")->nullable();
-            $table->foreignId("status_id")->nullable()->references("id")->on("status")->onDelete("cascade");
             $table->timestamps();
         });
     }

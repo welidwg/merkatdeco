@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -99,8 +100,9 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         try {
+            header('Access-Control-Allow-Origin: https://www.merkatdeco.free.nf');
             $product->delete();
-            return response(json_encode(["success" => "done"]), 200);
+            return response(json_encode(["success" => "done"]), 200)->header("Access-Control-Allow-Origin", "https://www.merkatdeco.free.nf");;
         } catch (\Throwable $th) {
             return response(json_encode(["error" => $th->getMessage()]), 500);
         }

@@ -3,6 +3,8 @@
     use App\Models\Status;
     use App\Models\Governorate;
     use App\Models\Source;
+    use Illuminate\Support\Facades\URL;
+    
 @endphp
 
 <table class="table my-0 " id="table_index_releve" style="table-layout: auto">
@@ -61,8 +63,8 @@
                 <td>{{ date('d M Y', strtotime($order->order_date)) }}</td>
 
                 <td>
-                    <form action="{{ route('orders.destroy', $order) }}" class="d-flex align-items-center "
-                        id="form_delete_order{{ $order->id }}">
+                    <form action="{{ secure_url(Url::route('orders.destroy', $order)) }}" method="POST"
+                        class="d-flex align-items-center " id="form_delete_order{{ $order->id }}">
                         @csrf
                         @method('DELETE')
                         <a data-bs-toggle="offcanvas" data-bs-target="#canvas_{{ $order->id }}"

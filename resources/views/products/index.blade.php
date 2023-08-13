@@ -27,13 +27,21 @@
             </script>
         </div>
         <div class="card-body">
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="spinner-border text-primary spinner-border-sm" role="status" id="spin">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
             <div class="table-responsive table mt-2 border-0" role="grid" aria-describedby="" id="table_container">
 
 
             </div>
         </div>
         <script>
-            $("#table_container").load("{{ route('products.table') }}")
+            $("#table_container").load("{{ route('products.table') }}", () => {
+                $("#spin").hide();
+
+            })
         </script>
     </div>
 @endsection

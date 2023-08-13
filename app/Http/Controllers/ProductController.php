@@ -105,4 +105,10 @@ class ProductController extends Controller
             return response(json_encode(["error" => $th->getMessage()]), 500);
         }
     }
+
+    function table()
+    {
+        $prods = Product::all();
+        return view("products.table", compact("prods"));
+    }
 }

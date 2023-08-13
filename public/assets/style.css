@@ -6,6 +6,12 @@ body {
     background-color: rgba(0, 0, 0, 0.6);
     font-family: "Ysabeau Infant", sans-serif; /* filter: blur(5px); */
 }
+.modal-backdrop {
+    z-index: 1055;
+}
+.offcanvas {
+    width: 600px !important;
+}
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     padding: 10px;

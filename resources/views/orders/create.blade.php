@@ -1,5 +1,4 @@
-<form class="border-1 shadow-sm p-3 rounded-4   col-lg-6" id="formOrder">
-    <h5 class="mb-3 fw-bold">Ajouter une commande</h5>
+<form class="border-1  p-3 h-100  " id="formOrder">
     @csrf
     @method('POST')
 
@@ -8,26 +7,27 @@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label for="" class="form-label">Nom du client</label>
-                    <input type="text" name="client" class="form-control shadow-none">
+                    <input type="text" name="client" class="form-control shadow-none" required>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label for="" class="form-label">Téléphone</label>
-                    <input type="number" min="0" name="phone" class="form-control shadow-none" id="">
+                    <input type="number" min="0" name="phone" class="form-control shadow-none" id=""
+                        required>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label for="" class="form-label">Date du commande</label>
-                    <input type="date" name="order_date" class="form-control shadow-none" id="">
+                    <input type="date" name="order_date" class="form-control shadow-none" required id="">
                 </div>
             </div>
             <div class="col-lg-12">
                 <div class="mb-3">
                     <label for="" class="form-label">Adresse</label>
-                    <input type="text" name="address" class="form-control shadow-none" id="">
+                    <input type="text" name="address" class="form-control shadow-none" required id="">
                 </div>
             </div>
             <div class="col-lg-6">
@@ -44,11 +44,10 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label for="" class="form-label">Source</label>
-                    <select class="form-select" name="source">
-                        <option>Facebook</option>
-                        <option>Instagram</option>
-                        <option>Site Web</option>
-                        <option>Téléphone</option>
+                    <select class="form-select" name="source_id">
+                        @foreach ($sources as $source)
+                            <option value="{{ $source->id }}">{{ $source->label }}</option>
+                        @endforeach
 
 
                     </select>
@@ -130,142 +129,7 @@
 
                 })
             </script>
-            @foreach ($prods as $item)
-                {{-- {{ print_r($item->measures) }} --}}
-                <!-- Modal -->
-                @if (count(json_decode($item->measures)) > 1 || count(json_decode($item->colors)) > 1)
-                    <div class="modal fade my-auto" id="modalProd{{ $item->id }}" tabindex="-1" role="dialog"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-md " role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalTitleId">Choisissez les détails:</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
 
-                                </div>
-                                <div class="modal-body">
-                                    @if (count(json_decode($item->measures)) > 1)
-                                        <span class="mb-2">Dimensions : </span>
-
-                                        <div>
-                                            @php
-                                                $i = 0;
-                                            @endphp
-                                            @foreach (json_decode($item->measures) as $it)
-                                                @php
-                                                    $i++;
-                                                @endphp
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input ckb_{{ $item->id }}"
-                                                        type="checkbox"
-                                                        id="checkbox_{{ $item->id }}{{ $i }}"
-                                                        value="{{ $it->measure }}" prod_id={{ $item->id }}
-                                                        title="{{ $item->title }}">
-                                                    <label class="form-check-label"
-                                                        for="checkbox_{{ $item->id }}{{ $i }}">{{ $it->measure }}</label>
-                                                </div>
-                                                {{-- <script>
-                                                    $("#checkbox_{{ $item->id }}{{ $i }}").bind().on("click", (e) => {
-                                                        if ($("#checkbox_{{ $item->id }}{{ $i }}").is(":checked")) {
-                                                            let title = $("#checkbox_{{ $item->id }}{{ $i }}").attr("title");
-                                                            let id = $("#checkbox_{{ $item->id }}{{ $i }}").attr("prod_id");
-                                                            let measure = $("#checkbox_{{ $item->id }}{{ $i }}").val();
-                                                            $("#prod_container").append(`
-                       <div class="row mb-2 inputTest{{ $item->id }}{{ $i }}">
-                        <div class="col-6 col-lg-8"> <input readonly type="text" value="${title +" ("+ measure+")"}" name="titles_prod[]"
-                                class="form-control bg-light text-size-md shadow-none" id="">
-                        </div>
-                        <div class="col-6 col-lg-4">
-                           <div class="d-flex align-items-center justify-content-between">
-                             <input type="number" placeholder="quantité" min="1" name="qtes_prod[]" required
-                                class="form-control text-size-md  shadow-none" id="">
-                               <a class="mx-1 text-danger" onclick="RemoveParent(this)"> <i class="fas fa-times" aria-hidden="true" ></i></a>
-                                </div>
-                        </div>
-                        <input type="hidden" name="ids[]" value="${id}">
-                        <input type="hidden" name="measures_prods[]" value="${measure}">
-
-                    </div>
-                    `)
-                                                        } else {
-                                                            $(".inputTest{{ $item->id }}{{ $i }}").remove()
-                                                        }
-
-                                                    })
-                                                </script> --}}
-                                            @endforeach
-
-                                        </div>
-                                    @endif
-                                    @if (count(json_decode($item->colors)) >= 1)
-                                        @php
-                                            $i = 0;
-                                        @endphp
-                                        <span class="mb-2">Couleur : </span>
-                                        <div>
-                                            @foreach (json_decode($item->colors) as $color)
-                                                @php
-                                                    $i++;
-                                                @endphp
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio"
-                                                        {{ $i == 1 ? 'checked' : ' ' }}
-                                                        name="colors_radio{{ $item->id }}"
-                                                        id="checkbox_color_{{ $item->id }}{{ $i }}"
-                                                        value="{{ $color->color }}" prod_id={{ $item->id }}
-                                                        title="{{ $item->title }}">
-                                                    <label class="form-check-label"
-                                                        for="checkbox_color_{{ $item->id }}{{ $i }}">{{ $color->color }}</label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Fermer</button>
-                                    <button type="button" class="btn btn-primary"
-                                        id="btn_add_prod{{ $item->id }}">Terminer</button>
-                                </div>
-                                <script>
-                                    $("#btn_add_prod{{ $item->id }}").on("click", (e) => {
-                                        $("#modalProd{{ $item->id }}").modal("hide");
-                                        var measures_checks = $(".ckb_{{ $item->id }}:checked")
-                                        measures_checks.each(function() {
-                                            let title = $(this).attr("title");
-                                            let id = $(this).attr("prod_id");
-                                            let measure = $(this).val();
-                                            let color = $("input[name=colors_radio{{ $item->id }}]:checked").val()
-                                            $("#prod_container").append(`
-                       <div class="row mb-2 ">
-                        <div class="col-6 col-lg-8"> <input readonly type="text" value="${title +" ("+ measure+") "+ color}" name="titles_prod[]"
-                                class="form-control bg-light text-size-md shadow-none" id="">
-                        </div>
-                        <div class="col-6 col-lg-4">
-                           <div class="d-flex align-items-center justify-content-between">
-                             <input type="number" placeholder="quantité" min="1" name="qtes_prod[]" required
-                                class="form-control text-size-md  shadow-none" id="">
-                               <a class="mx-1 text-danger" onclick="RemoveParent(this)"> <i class="fas fa-times" aria-hidden="true" ></i></a>
-                                </div>
-                        </div>
-                        <input type="hidden" name="ids[]" value="${id}">
-                        <input type="hidden" name="measures_prods[]" value="${measure}">
-                        <input type="hidden" name="colors_prods[]" value="${color}">
-
-                    </div>
-                    `)
-
-                                        });
-
-                                    })
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            @endforeach
             <div class="col-lg-12">
                 <div class="mb-3">
                     <label for="" class="form-label">Remarques </label>
@@ -280,7 +144,7 @@
                 <label class="form-check-label" for="has_subOrder">Sous-commande </label>
             </div> --}}
         </div>
-       
+
     </div>
     <button type="submit" class="btn btn-primary float-end">Ajouter</button>
 </form>
@@ -338,48 +202,6 @@
         )
 
 
-        // $("#subCommandContent").append(`
-        // <div  class="row w-100 subCommandContent text-size-md" >
-        //     <hr style="border:2px solid black">
-        //           <a  onclick="RemoveParentt(this)"  class="text-end"><i class="fa fa-times" "></i></a>
-
-        //         <div class="col-6 col-lg-4">
-        //             <div class="mb-3">
-        //                 <label for="" class="form-label">Sous traitant</label>
-        //                 <input type="text" name="sub_contractor" class="form-control text-size-md  shadow-none" id="">
-        //             </div>
-        //         </div>
-        //         <div class="col-6 col-lg-4">
-        //             <div class="mb-3">
-        //                 <label for="" class="form-label">Téléphone</label>
-        //                 <input type="number" name="phone_subc" class="form-control text-size-md shadow-none" id="">
-        //             </div>
-        //         </div>
-        //         <div class="col-12 col-lg-4">
-        //             <div class="mb-3">
-        //                 <label for="" class="form-label">date du commande</label>
-        //                 <input type="date" name="start_date" class="form-control text-size-md shadow-none" id="">
-        //             </div>
-        //         </div>
-        //         <div class="col-12">
-        //             <div class="mb-3 text-size-md">
-        //                 <label for="" class="form-label ">Pièces <a onclick="add_piece('piece_container${len+1}')" class="text-primary"><i
-        //                             class="fas fa-plus-circle" aria-hidden="true"></i></a></label>
-        //                 <div class="row">
-        //                     <div class="col-6 col-lg-8">
-        //                         <input type="text" name="pieces[]" placeholder="nom du pièce"
-        //                             class="form-control text-size-md shadow-none pieceInput mb-3" id="">
-        //                     </div>
-        //                     <div class="col-6 col-lg-4">
-        //                         <input type="number" min="1" name="qte[]" placeholder="quantité"
-        //                             class="form-control text-size-md shadow-none qteInput mb-3" id="">
-        //                     </div>
-        //                 </div>
-
-        //                 <div id="piece_container${len+1}" class="text-size-md"></div>
-        //             </div>
-        //         </div></div>
-        // `)
     })
 
     function add_piece(id) {
@@ -438,7 +260,8 @@
                 $("#formOrder").trigger("reset");
                 $("#prod_container").html("")
                 Swal.fire("Succès", "Commande bien enregistré", "success")
-                console.log(res.data.success)
+                $("#table_order_container").load("{{ route('orders.table') }}")
+
             })
             .catch(err => {
                 console.error(err.response.data);

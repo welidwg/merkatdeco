@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Delivery;
-use App\Models\Order;
-use App\Models\Status;
+use App\Models\Source;
 use Illuminate\Http\Request;
 
-class DeliveryController extends Controller
+class SourceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +15,6 @@ class DeliveryController extends Controller
     public function index()
     {
         //
-        $deliveries = Delivery::all();
-        return view("delivery.index", compact("deliveries"));
     }
 
     /**
@@ -29,6 +25,7 @@ class DeliveryController extends Controller
     public function create()
     {
         //
+        return view("sources.create");
     }
 
     /**
@@ -39,19 +36,19 @@ class DeliveryController extends Controller
      */
     public function store(Request $request)
     {
-        //
         try {
-            $status = Status::where("label", "Livrée")->first();
-            foreach ($request->orders as  $id) {
-                $order = Order::find($id);
-
-                $order->update(["status_id" => $status->id]);
-                Delivery::create([
-                    "order_id" => $id,
-                    "delivery_date" => date("Y-m-d")
-                ]);
+            $label = $request->label;
+            if (str_contains($label, ',')) {
+                $arr = explode(",", $label);
+                foreach ($arr as $gov) {
+                    if ($gov != "") {
+                        Source::create(["label" => $gov]);
+                    }
+                }
+                return response(json_encode(["success" => "done"]), 201);
             }
-            return response(json_encode(["success" => $request->orders]), 201);
+            $gov = Source::create($request->all());
+            return response(json_encode(["success" => "done"]), 201);
         } catch (\Throwable $th) {
             return response(json_encode(["error" => $th->getMessage()]), 500);
         }
@@ -60,10 +57,10 @@ class DeliveryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Delivery  $delivery
+     * @param  \App\Models\Source  $source
      * @return \Illuminate\Http\Response
      */
-    public function show(Delivery $delivery)
+    public function show(Source $source)
     {
         //
     }
@@ -71,10 +68,10 @@ class DeliveryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Delivery  $delivery
+     * @param  \App\Models\Source  $source
      * @return \Illuminate\Http\Response
      */
-    public function edit(Delivery $delivery)
+    public function edit(Source $source)
     {
         //
     }
@@ -83,10 +80,10 @@ class DeliveryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Delivery  $delivery
+     * @param  \App\Models\Source  $source
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Delivery $delivery)
+    public function update(Request $request, Source $source)
     {
         //
     }
@@ -94,10 +91,10 @@ class DeliveryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Delivery  $delivery
+     * @param  \App\Models\Source  $source
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Delivery $delivery)
+    public function destroy(Source $source)
     {
         //
     }

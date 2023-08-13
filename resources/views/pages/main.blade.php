@@ -44,7 +44,7 @@
 
 
                         </div>
-                        <div class="col-auto"><i class="fas fa-euro-sign fa-2x text-gray-300"></i></div>
+                        <div class="col-auto"><i class="fas fa-cart-plus fa-2x text-gray-300"></i></div>
                     </div>
                 </div>
             </div>
@@ -66,7 +66,8 @@
 
 
                         </div>
-                        <div class="col-auto"><i class="fas fa-euro-sign fa-2x text-gray-300"></i></div>
+
+                        <div class="col-auto"><i class="fas fa-check-double fa-2x text-gray-300"></i></div>
                     </div>
                 </div>
             </div>
@@ -76,7 +77,7 @@
                 <div class="card-body">
                     <div class="row align-items-center no-gutters">
                         <div class="col me-2 d-flex flex-column justify-content-between h-100">
-                            <div class="text-uppercase text-primary fw-bold text-xs mb-3"><span>Commandes livrée
+                            <div class="text-uppercase text-primary fw-bold text-xs mb-3"><span>Commandes livrées
                                 </span>
                             </div>
 
@@ -84,9 +85,8 @@
                                 </span>
                             </div>
 
-
                         </div>
-                        <div class="col-auto"><i class="fas fa-euro-sign fa-2x text-gray-300"></i></div>
+                        <div class="col-auto"><i class="fas fa-truck-container fa-2x text-gray-300"></i></div>
                     </div>
                 </div>
             </div>
@@ -123,7 +123,7 @@
 
 
                         </div>
-                        <div class="col-auto"><i class="fas fa-euro-sign fa-2x text-gray-300"></i></div>
+                        <div class="col-auto"><i class="fas far fa-money-bill-alt fa-2x text-gray-300"></i></div>
                     </div>
                 </div>
             </div>

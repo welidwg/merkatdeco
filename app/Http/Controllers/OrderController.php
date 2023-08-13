@@ -6,6 +6,7 @@ use App\Models\Delivery;
 use App\Models\Governorate;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Source;
 use App\Models\Status;
 use Illuminate\Http\Request;
 
@@ -20,8 +21,9 @@ class OrderController extends Controller
     {
         $orders = Order::all();
         $status = Status::all();
+        $prods = Product::all();
 
-        return view("orders.index", compact("orders", "status"));
+        return view("orders.index", compact("orders", "status", "prods"));
     }
 
     /**
@@ -34,8 +36,9 @@ class OrderController extends Controller
         $govs = Governorate::all();
         $prods = Product::all();
         $status = Status::all();
+        $sources = Source::all();
 
-        return view("orders.create", ["govs" => $govs, "prods" => $prods, "status" => $status]);
+        return view("orders.create", ["govs" => $govs, "prods" => $prods, "status" => $status, "sources" => $sources]);
     }
 
     /**
@@ -91,7 +94,7 @@ class OrderController extends Controller
             $order->update($request->all());
             $status = Status::find($request->status_id);
             if ($old_status != $status->label) {
-                if ($old_status == "Livrée") {
+                if ($old_status == "Livrée" && $order->delivery != null) {
                     $order->delivery->delete();
                 }
             }
@@ -104,6 +107,9 @@ class OrderController extends Controller
                         $pr->save();
                     }
                 }
+            }
+            if ($status && $status->label == "Livrée") {
+                Delivery::create(["order_id" => $order->id, "delivery_date" => date("Y-m-d")]);
             }
             return response(json_encode(["success" => "done"]), 200);
         } catch (\Throwable $th) {
@@ -126,5 +132,12 @@ class OrderController extends Controller
         } catch (\Throwable $th) {
             return response(json_encode(["error" => $th->getMessage()]), 500);
         }
+    }
+
+    function table()
+    {
+        $orders = Order::all();
+        $status = Status::all();
+        return view("orders.table", compact("orders", "status"));
     }
 }

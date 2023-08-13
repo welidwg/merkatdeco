@@ -1,4 +1,4 @@
-<form class="border-1 border-primary shadow-sm p-3 rounded-4 col-12 col-md-6 text-size-md" id="addProdForm">
+<form class="border-1 border-primary shadow-sm p-3 rounded-4 col-12  text-size-md" id="addProdForm">
     @csrf
     @method('POST')
     <h5 class="mb-3 fw-bold">Ajouter un produit</h5>
@@ -241,9 +241,8 @@
             .then(res => {
                 $("#addProdForm").trigger("reset")
                 Swal.fire('Succès', "Le produit est bien ajouté.", "success")
-                console.log('====================================');
-                console.log(res);
-                console.log('====================================');
+                $("#table_container").load("{{ route('products.table') }}")
+
 
             })
             .catch(err => {

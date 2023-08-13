@@ -38,6 +38,14 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link  
+                     {{ Route::currentRouteName() == 'deliveries.index' ? 'active' : '' }}
+                     "
+                    href="{{ route('deliveries.index') }}">
+                    <i class="fas fa-truck-container "></i><span>Livraisons</span></a>
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link  
                      {{ Route::currentRouteName() == 'tools.main' ? 'active' : '' }}
                      "
                     href="{{ route('tools.main') }}">

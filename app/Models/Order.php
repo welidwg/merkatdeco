@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Source as ModelsSource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ["client", "governorate_id", "address", "phone", "products", "details", "source", "status_id",  "order_date", "delivery_date"];
+    protected $fillable = ["client", "governorate_id", "address", "phone", "products", "details", "source", "status_id", "source_id",  "order_date", "delivery_date"];
 
     public static function countReady()
     {
@@ -32,6 +33,10 @@ class Order extends Model
         return $this->belongsTo(Status::class, "status_id");
     }
 
+    public function source(): BelongsTo
+    {
+        return $this->belongsTo(ModelsSource::class);
+    }
 
     public function sub_orders(): HasMany
     {

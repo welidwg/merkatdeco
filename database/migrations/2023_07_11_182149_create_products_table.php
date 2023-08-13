@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             $table->json("measures");
             $table->json("colors");
             $table->json("details")->nullable(true);
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 

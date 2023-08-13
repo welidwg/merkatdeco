@@ -21,7 +21,7 @@ Route::get("/optimize", function () {
     dd("optimized");
 });
 Route::get('/', function () {
-    return view('pages.main');
+    return redirect()->to("/main");
 })->name("main");
 Route::get('/csrf', function () {
     return csrf_token();

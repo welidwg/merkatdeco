@@ -70,7 +70,7 @@
                                                 @endphp
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input ckb_{{ $item->id }}" type="checkbox"
-                                                        {{ $i == 1 && 'checked' }}
+                                                        {{ $i == 1 ? 'checked' : '' }}
                                                         id="checkbox_{{ $item->id }}{{ $i }}"
                                                         value="{{ $it->measure }}" prod_id={{ $item->id }}
                                                         title="{{ $item->title }}">

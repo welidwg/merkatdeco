@@ -57,7 +57,7 @@
 
                                 </div>
                                 <div class="modal-body">
-                                    @if (count(json_decode($item->measures)) > 1)
+                                    @if (count(json_decode($item->measures)) > 0)
                                         <span class="mb-2">Dimensions : </span>
 
                                         <div>

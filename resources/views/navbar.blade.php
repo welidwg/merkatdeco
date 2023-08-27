@@ -27,13 +27,13 @@
                             data-bs-toggle="dropdown" href="#">
                             <span class="d-none d-lg-inline me-2 text-primary-600  fw-bold "><i
                                     class="fal fa-user "></i>
-                                {{ Auth::check() ? Auth::user()->nom : '' }}
+                                {{ Auth::check() ? Auth::user()->login : '' }}
                                 <i class="far fa-grip-lines-vertical"></i>
-                                {{ Auth::user()->role == 0 ? 'Administrateur' : 'Caissier' }}
+                                {{ Auth::user()->getRole(Auth::user()->role) }}
                             </span>
                             <span class=" d-inline d-lg-none me-2 text-primary-600  fw-bold "><i
                                     class="fal fa-user "></i>
-                                {{ Auth::check() ? Auth::user()->nom : '' }}
+                                {{ Auth::check() ? Auth::user()->login : '' }}
 
                             </span>
                         </a>
@@ -47,11 +47,12 @@
                             class="dropdown-item" href="#"><i
                                 class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i> Activity log</a> --}}
                         <a class="dropdown-item d-block d-lg-none">
-                            {{ Auth::check() && Auth::user()->role == 0 ? 'Administrateur' : 'Caissier' }}</a>
+                            {{ Auth::user()->getRole(Auth::user()->role) }}
+                        </a>
                         <div class="dropdown-divider"></div>
-                        {{-- 
+
                         <a class="dropdown-item" href="{{ route('logout') }}"><i
-                                class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>Déconnexion</a> --}}
+                                class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>Déconnexion</a>
                     </div>
                 </div>
             </li>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDeliveriesTable extends Migration
+class CreateAccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateDeliveriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('deliveries', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("order_id")->references("id")->on('orders')->onDelete("cascade");
-            $table->date('affected_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->string("login");
+            $table->string("password", 255);
+            $table->integer("phone")->nullable();
+            $table->integer("role");
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateDeliveriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('deliveries');
+        Schema::dropIfExists('accounts');
     }
 }

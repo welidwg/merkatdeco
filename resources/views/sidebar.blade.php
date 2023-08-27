@@ -12,6 +12,16 @@
         </a>
         <hr class="sidebar-divider my-0" />
         <ul id="accordionSidebar" class="navbar-nav text-light">
+            @if (Auth::user()->role == 2)
+                <li class="nav-item">
+                    <a class="nav-link  
+                     {{ Route::currentRouteName() == 'prestations' ? 'active' : '' }}
+                     "
+                        href="{{ route('prestations') }}">
+                        <i class="fas fa-list-alt" aria-hidden="true"></i><span>Prestations</span></a>
+
+                </li>
+            @endif
             <li class="nav-item">
                 <a class="nav-link  
                      {{ Route::currentRouteName() == 'main' ? 'active' : '' }}
@@ -22,36 +32,52 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link  
-                     {{ Route::currentRouteName() == 'products.index' ? 'active' : '' }}
-                     "
-                    href="{{ route('products.index') }}">
-                    <i class="fas fa-clipboard-list"></i><span>Produits</span></a>
-
-            </li>
-            <li class="nav-item">
-                <a class="nav-link  
                      {{ Route::currentRouteName() == 'orders.index' ? 'active' : '' }}
                      "
                     href="{{ route('orders.index') }}">
                     <i class="fas fa-clipboard-list"></i><span>Commandes</span></a>
 
             </li>
-            <li class="nav-item">
-                <a class="nav-link  
+            @if (Auth::user()->role == 0 || Auth::user()->role == 1)
+                <li class="nav-item">
+                    <a class="nav-link  
                      {{ Route::currentRouteName() == 'deliveries.index' ? 'active' : '' }}
                      "
-                    href="{{ route('deliveries.index') }}">
-                    <i class="fas fa-truck-container "></i><span>Livraisons</span></a>
+                        href="{{ route('deliveries.index') }}">
+                        <i class="fas fa-truck-container "></i><span>Livraisons</span></a>
 
-            </li>
-            <li class="nav-item">
-                <a class="nav-link  
+                </li>
+            @endif
+            @if (Auth::user()->role == 0)
+                <li class="nav-item">
+                    <a class="nav-link  
+                     {{ Route::currentRouteName() == 'products.index' ? 'active' : '' }}
+                     "
+                        href="{{ route('products.index') }}">
+                        <i class="fas fa-clipboard-list"></i><span>Produits</span></a>
+
+                </li>
+
+
+
+
+                <li class="nav-item">
+                    <a class="nav-link  
+                     {{ Route::currentRouteName() == 'accounts.index' ? 'active' : '' }}
+                     "
+                        href="{{ route('accounts.index') }}">
+                        <i class="fas fa-users "></i><span>Comptes</span></a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  
                      {{ Route::currentRouteName() == 'tools.main' ? 'active' : '' }}
                      "
-                    href="{{ route('tools.main') }}">
-                    <i class="fas fa-tools" aria-hidden="true"></i><span>Outils</span></a>
+                        href="{{ route('tools.main') }}">
+                        <i class="fas fa-tools" aria-hidden="true"></i><span>Outils</span></a>
 
-            </li>
+                </li>
+            @endif
 
         </ul>
         {{-- <div class="text-center d-none d-md-inline">

@@ -20,10 +20,13 @@
                     <thead>
                         <tr>
                             <th>#Id</th>
+                            <th>Status</th>
                             <th>Commande</th>
+                            @if (Auth::user()->role == 0)
+                                <th>Livreur</th>
+                            @endif
+                            <th>Date d'affectation</th>
                             <th>Date du livraison</th>
-                            <th>Livreur</th>
-
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -31,43 +34,100 @@
                         @foreach ($deliveries as $delivery)
                             <tr>
                                 <td class="fw-bold">#{{ $delivery->id }}</td>
+                                <td><span
+                                        class="badge rounded-pill text-bg-{{ $delivery->status->class }}">{{ $delivery->status->label }}</span>
+                                </td>
                                 <td><span class=""> <a href="#canvas_order_{{ $delivery->order->id }}"
                                             class="text-decoration-none"
                                             data-bs-toggle="offcanvas">#{{ $delivery->order->id }}</a></span>
                                 </td>
-                                <td class="">{{ $delivery->delivery_date }}</td>
+                                @if (Auth::user()->role == 0)
+                                    <td>
+                                        {{ $delivery->user->login }}
+                                    </td>
+                                @endif
+                                <td class="">{{ $delivery->affected_date }}</td>
+                                <td class="">{{ $delivery->end_date == null ? '-' : $delivery->end_date }}</td>
+
 
                                 <td>
-                                    -
-                                </td>
-
-
-
-                                <td>
-                                    <form action="{{ route('deliveries.destroy', $delivery) }}"
-                                        class="d-flex align-items-center " id="form_delete_delivery{{ $delivery->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        {{-- <a data-bs-toggle="offcanvas" data-bs-target="#canvas_delivery_{{ $order->id }}"
+                                    @if (Auth::user()->role == 0)
+                                        <form action="{{ route('deliveries.destroy', $delivery) }}"
+                                            class="d-flex align-items-center " id="form_delete_delivery{{ $delivery->id }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            {{-- <a data-bs-toggle="offcanvas" data-bs-target="#canvas_delivery_{{ $order->id }}"
                                             class="text-primary "><i class="far fa-eye "></i></a> --}}
-                                        <button onclick="return confirm('Vous êtes sûr ?')" type="submit" href="#"
-                                            class="text-danger btn"><i class="far fa-times-circle "></i></i></a>
-                                    </form>
-                                    <script>
-                                        $('#form_delete_delivery{{ $delivery->id }}').on("submit", (e) => {
-                                            e.preventDefault();
-                                            axios.delete(e.target.action)
-                                                .then(res => {
-                                                    Swal.fire("Suppression réussite !", "", "success")
-                                                    setTimeout(() => {
-                                                        window.location.reload()
-                                                    }, 700);
-                                                })
-                                                .catch(err => {
-                                                    console.error(err);
-                                                })
-                                        });
-                                    </script>
+                                            <button onclick="return confirm('Vous êtes sûr ?')" type="submit"
+                                                href="#" class="text-danger btn">
+                                                <i class="far fa-times-circle "></i>
+                                            </button>
+                                        </form>
+                                        <script>
+                                            $('#form_delete_delivery{{ $delivery->id }}').on("submit", (e) => {
+                                                e.preventDefault();
+                                                axios.delete(e.target.action)
+                                                    .then(res => {
+                                                        Swal.fire("Suppression réussite !", "", "success")
+                                                        setTimeout(() => {
+                                                            window.location.reload()
+                                                        }, 700);
+                                                    })
+                                                    .catch(err => {
+                                                        console.error(err);
+                                                    })
+                                            });
+                                        </script>
+                                    @else
+                                        @if ($delivery->status->label == 'En cours')
+                                            <div class="d-flex align-items-center ">
+                                                <a href="#" id="done{{ $delivery->id }}" class="text-success btn">
+                                                    <i class="far fa-check-circle "></i>
+                                                </a>
+                                                <a href="#" id="end{{ $delivery->id }}" class="text-danger btn">
+                                                    <i class="far fa-times-circle "></i>
+                                                </a>
+                                            </div>
+                                        @else
+                                            -
+                                        @endif
+                                        <script>
+                                            $("#done{{ $delivery->id }}").on("click", (e) => {
+                                                if (confirm(`Vous êtes sûr de terminer cette livraion ?`)) {
+                                                    console.log("test");
+                                                    axios.post("{{ route('deliveries.upd', ['status' => 'done', 'id' => $delivery->id]) }}")
+                                                        .then(res => {
+                                                            console.log(res)
+                                                            setTimeout(() => {
+                                                                window.location.reload();
+                                                            }, 700);
+                                                        })
+                                                        .catch(err => {
+                                                            console.error(err);
+                                                        })
+                                                } else {
+                                                    console.log("cancel");
+                                                }
+                                            })
+                                            $("#end{{ $delivery->id }}").on("click", (e) => {
+                                                if (confirm(`Vous êtes sûr d'annuler cette livraion ?`)) {
+                                                    console.log("test");
+                                                    axios.post("{{ route('deliveries.upd', ['status' => 'end', 'id' => $delivery->id]) }}")
+                                                        .then(res => {
+                                                            console.log(res)
+                                                            setTimeout(() => {
+                                                                window.location.reload();
+                                                            }, 700);
+                                                        })
+                                                        .catch(err => {
+                                                            console.error(err);
+                                                        })
+                                                } else {
+                                                    console.log("cancel");
+                                                }
+                                            })
+                                        </script>
+                                    @endif
                                 </td>
 
 

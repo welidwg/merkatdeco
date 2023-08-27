@@ -87,3 +87,18 @@ label {
 h5 {
     font-weight: bolder;
 }
+.bg-flou {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    color: #cd1818;
+
+    background-image: url("/assets/img/back.webp");
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1 !important;
+    filter: blur(10px);
+}

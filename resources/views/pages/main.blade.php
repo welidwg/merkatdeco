@@ -7,11 +7,15 @@
     use App\Models\Order;
     use App\Models\Governorate;
     use App\Models\Product;
+    use App\Models\Delivery_status;
     $orders = Order::whereMonth('order_date', date('m'))
         ->whereYear('order_date', date('Y'))
         ->get();
-    $deliveries = Delivery::whereMonth('delivery_date', date('m'))
-        ->whereYear('delivery_date', date('Y'))
+    $status_termine = Delivery_status::where('label', 'like', '%Terminée%')->first();
+    
+    $deliveries = Delivery::whereMonth('affected_date', date('m'))
+        ->whereYear('affected_date', date('Y'))
+        ->where('status_id', $status_termine)
         ->get();
 @endphp
 @section('content')

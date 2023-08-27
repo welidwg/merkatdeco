@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Delivery;
 use App\Models\Governorate;
 use App\Models\Order;
+use App\Models\orderCategorie;
 use App\Models\Product;
 use App\Models\Source;
 use App\Models\Status;
 use Illuminate\Http\Request;
+
 
 class OrderController extends Controller
 {
@@ -22,8 +25,12 @@ class OrderController extends Controller
         $orders = Order::all();
         $status = Status::all();
         $prods = Product::all();
+        $categs = orderCategorie::all();
+        $govs = Governorate::all();
 
-        return view("orders.index", compact("orders", "status", "prods"));
+
+
+        return view("orders.index", compact("orders", "status", "prods", "categs", "govs"));
     }
 
     /**
@@ -37,8 +44,9 @@ class OrderController extends Controller
         $prods = Product::all();
         $status = Status::all();
         $sources = Source::all();
+        $categs = orderCategorie::all();
 
-        return view("orders.create", ["govs" => $govs, "prods" => $prods, "status" => $status, "sources" => $sources]);
+        return view("orders.create", ["govs" => $govs, "prods" => $prods, "status" => $status, "sources" => $sources, "categs" => $categs]);
     }
 
     /**
@@ -134,10 +142,42 @@ class OrderController extends Controller
         }
     }
 
-    function table()
+
+    function table($cat, $stat, $reg, $search)
     {
-        $orders = Order::all();
+        if ($cat == 0 && $stat == 0 && $reg == 0 && $search == 'all') {
+            $orders = Order::all();
+        } else if ($cat == 0 || $stat == 0 || $reg == 0 || $search == 'all') {
+            $query = Order::query();
+
+            if ($cat != 0) {
+                $query->where("category_id", $cat);
+            }
+
+            if ($stat != 0) {
+                $query->where("status_id", $stat);
+            }
+
+            if ($reg != 0) {
+                $query->where("governorate_id", $reg);
+            }
+            if ($search != 'all') {
+                $query->where("client", "like", "%$search%")->orWhere("phone", $search)->orWhere("id", $search);
+            }
+
+            $orders = $query->get();
+        } else {
+            $query = Order::query();
+            $query->where("category_id", $cat)->where("status_id", $stat)->where("governorate_id", $reg);
+            $query->where("client", "like", "%$search%")->orWhere("phone", $search)->orWhere("id", $search);
+            $orders = $query->get();
+        }
+
+
         $status = Status::all();
-        return view("orders.table", compact("orders", "status"));
+        $users = new  Account;
+        $subcs = $users->getSubContractor();
+
+        return view("orders.table", compact("orders", "status", "cat", "stat", "reg", "search", "subcs"));
     }
 }

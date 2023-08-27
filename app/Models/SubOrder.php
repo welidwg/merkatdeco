@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class SubOrder extends Model
 {
     use HasFactory;
-    protected $fillable = ["order_id", "subcontractor", "phone", "pieces", "start_date", "end_date", "status_id"];
+    protected $fillable = ["order_id", "user_id", "phone", "pieces", "start_date", "predicted_date", "advance", "end_date", "status_id"];
 
     public function status(): BelongsTo
     {
@@ -19,5 +19,10 @@ class SubOrder extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, "order_id");
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, "user_id");
     }
 }

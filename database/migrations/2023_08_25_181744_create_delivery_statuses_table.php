@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDeliveriesTable extends Migration
+class CreateDeliveryStatusesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateDeliveriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('deliveries', function (Blueprint $table) {
+        Schema::create('delivery_statuses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("order_id")->references("id")->on('orders')->onDelete("cascade");
-            $table->date('affected_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->string("label");
+            $table->string("class");
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateDeliveriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('deliveries');
+        Schema::dropIfExists('delivery_statuses');
     }
 }

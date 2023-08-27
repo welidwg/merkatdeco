@@ -52,6 +52,20 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-xl-3 mb-4 " id="add_status_del">
+            <div class="card shadow-sm border-start-primary py-2 h-100 rounded-3">
+                <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col me-2">
+                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Nouveau status de livraison
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-plus fa-2x text-gray-300"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-md-6 col-xl-3 mb-4 " id="add_src">
             <div class="card shadow-sm border-start-primary py-2 h-100 rounded-3">
                 <div class="card-body">
@@ -80,7 +94,20 @@
                 </div>
             </div>
         </div>
-
+        <div class="col-md-6 col-xl-3 mb-4 " id="add_categ_order">
+            <div class="card shadow-sm border-start-primary py-2 h-100 rounded-3">
+                <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col me-2">
+                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Nouvelle categorie commande
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-auto"><i class="fas fa-plus fa-2x text-gray-300"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-md-6 col-xl-3 mb-4 " id="add_gov">
             <div class="card shadow-sm border-start-primary py-2 h-100 rounded-3">
                 <div class="card-body">
@@ -114,11 +141,11 @@
 
             $("#content_tools").load("{{ route('governorates.create') }}")
         })
-        // $("#add_prod").on("click", (e) => {
-        //     $("#content_tools").html("")
+        $("#add_categ_order").on("click", (e) => {
+            $("#content_tools").html("")
 
-        //     $("#content_tools").load("{{ route('products.create') }}")
-        // })
+            $("#content_tools").load("{{ route('order_cats.create') }}")
+        })
         // $("#add_order").on("click", () => {
         //     $("#content_tools").html("")
 
@@ -134,6 +161,11 @@
             $("#content_tools").html("")
 
             $("#content_tools").load("{{ route('sources.create') }}")
+        })
+        $("#add_status_del").on("click", () => {
+            $("#content_tools").html("")
+
+            $("#content_tools").load("{{ route('delivery_status.create') }}")
         })
     </script>
 @endsection

@@ -2,7 +2,12 @@
 @section('title')
     Commandes
 @endsection
-
+@php
+    $cat = 0;
+    $stat = 0;
+    $reg = 0;
+    $search = 'all';
+@endphp
 @section('content')
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="add_order_canvas" style="width: 600px;">
         <div class="offcanvas-header">
@@ -21,8 +26,10 @@
     <div class="card shadow text-size-md">
         <div class="card-header py-3 d-flex align-items-center justify-content-start">
             <p class="text-primary m-0 fw-bold mx-2"> Commandes </p>
-            <a href="#add_order_canvas" id="open_product" data-bs-toggle="offcanvas" class="text-decoration-none"><i
-                    class="fas fa-plus" aria-hidden="true"></i></a>
+            @if (Auth::user()->role == 0)
+                <a href="#add_order_canvas" id="open_product" data-bs-toggle="offcanvas" class="text-decoration-none"><i
+                        class="fas fa-plus" aria-hidden="true"></i></a>
+            @endif
             <script>
                 $("#open_product").on("click", (e) => {
                     $("#content_tools").html("")
@@ -34,6 +41,144 @@
             </script>
         </div>
         <div class="card-body">
+            <div class="row mx-auto ">
+                <div class=" col-lg-3 mb-3  d-flex align-items-center justify-content-between ">
+                    <label for="" class="form-label mx-2">Catégorie</label>
+                    <select class="form-select text-size-md " name="" id="filter">
+                        <option selected value="0">Tous</option>
+                        @foreach ($categs as $item)
+                            <option value="{{ $item->id }}">{{ $item->label }}</option>
+                        @endforeach
+
+                    </select>
+                    <script>
+                        $("#filter").on("change", (e) => {
+                            $("#spin").show()
+                            let val = e.target.value;
+                            let valstat = $("#filter_status").val();
+                            let valreg = $("#filter_reg").val();
+                            let search = $("#search").val() == '' ? "all" : $("#search").val()
+
+                            let routeUrl =
+                                `{{ route('orders.table', ['cat' => ':val', 'stat' => ':valstat', 'reg' => ':valreg', 'search' => ':search']) }}`
+                                .replace(':val',
+                                    val)
+                                .replace(":valstat", valstat)
+                                .replace(":search", search)
+                                .replace(":valreg", valreg);
+
+                            $("#table_order_container").load(routeUrl, () => {
+                                $("#spin").hide()
+                            })
+                        })
+                    </script>
+                </div>
+                <div class=" col-lg-3 mb-3   d-flex align-items-center justify-content-between ">
+                    <label for="" class="form-label mx-2">Status</label>
+                    <select class="form-select text-size-md " name="" id="filter_status">
+                        <option selected value="0">Tous</option>
+                        @foreach ($status as $item)
+                            <option value="{{ $item->id }}">{{ $item->label }}</option>
+                        @endforeach
+
+                    </select>
+                    <script>
+                        $("#filter_status").on("change", (e) => {
+                            $("#spin").show()
+                            let val = $("#filter").val()
+                            let valstat = e.target.value;
+                            let valreg = $("#filter_reg").val();
+
+                            let search = $("#search").val() == '' ? "all" : $("#search").val()
+
+                            let routeUrl =
+                                `{{ route('orders.table', ['cat' => ':val', 'stat' => ':valstat', 'reg' => ':valreg', 'search' => ':search']) }}`
+                                .replace(
+                                    ':val',
+                                    val)
+                                .replace(":valstat", valstat)
+                                .replace(":search", search)
+                                .replace(":valreg", valreg);
+
+
+                            $("#table_order_container").load(routeUrl, () => {
+                                $("#spin").hide()
+                            })
+                        })
+                    </script>
+                </div>
+                <div class=" col-lg-3 mb-3   d-flex align-items-center justify-content-between ">
+                    <label for="" class="form-label mx-2">Région</label>
+                    <select class="form-select text-size-md " name="" id="filter_reg">
+                        <option selected value="0">Tous</option>
+                        @foreach ($govs as $item)
+                            <option value="{{ $item->id }}">{{ $item->label }}</option>
+                        @endforeach
+
+                    </select>
+                    <script>
+                        $("#filter_reg").on("change", (e) => {
+                            $("#spin").show()
+                            let val = $("#filter").val()
+                            let valstat = $("#filter_status").val();
+                            let valreg = e.target.value;
+                            let search = $("#search").val() == '' ? "all" : $("#search").val()
+
+
+                            let routeUrl =
+                                `{{ route('orders.table', ['cat' => ':val', 'stat' => ':valstat', 'reg' => ':valreg', 'search' => ':search']) }}`
+                                .replace(
+                                    ':val',
+                                    val)
+                                .replace(":valstat", valstat)
+                                .replace(":search", search)
+                                .replace(":valreg", valreg);
+
+
+                            $("#table_order_container").load(routeUrl, () => {
+                                $("#spin").hide()
+                            })
+                        })
+                    </script>
+                </div>
+                <div class=" col-lg-3 mb-3   d-flex align-items-center justify-content-between ">
+                    <label for="" class="form-label mx-2">Recherche</label>
+                    <input type="text" class="form-control" name="" value="" id="search"
+                        aria-describedby="helpId" placeholder="nom client,numéro,..">
+                    <script>
+                        $("#search").on("change", (e) => {
+                            $("#spin").show()
+                            let val = $("#filter").val()
+                            let valstat = $("#filter_status").val();
+                            let valreg = $("#filter_reg").val();
+                            let search;
+                            if (e.target.value == '') {
+                                search = 'all';
+                            } else {
+                                search = e.target.value;
+
+                            }
+
+
+
+                            let routeUrl =
+                                `{{ route('orders.table', ['cat' => ':val', 'stat' => ':valstat', 'reg' => ':valreg', 'search' => ':search']) }}`
+                                .replace(
+                                    ':val',
+                                    val)
+                                .replace(":valstat", valstat)
+                                .replace(":search", search)
+                                .replace(":valreg", valreg);
+
+
+                            $("#table_order_container").load(routeUrl, () => {
+                                $("#spin").hide()
+                            })
+                        })
+                    </script>
+                </div>
+            </div>
+
             <div class="d-flex justify-content-center align-items-center">
                 <div class="spinner-border text-primary spinner-border-sm" role="status" id="spin">
                     <span class="visually-hidden">Loading...</span>
@@ -107,7 +252,8 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Fermer</button>
                                     <button type="button" class="btn btn-primary"
                                         id="btn_add_prod{{ $item->id }}">Terminer</button>
                                 </div>
@@ -153,8 +299,11 @@
 
 
     <script>
-        $("#table_order_container").load("{{ route('orders.table') }}", () => {
-            $("#spin").hide()
-        })
+        $("#table_order_container").load(
+            "{{ route('orders.table', ['cat' => $cat, 'stat' => $stat, 'reg' => $reg, 'search' => $search]) }}",
+            () => {
+                $("#spin").hide()
+            })
     </script>
+
 @endsection

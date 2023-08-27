@@ -2,6 +2,7 @@
     @csrf
     @method('POST')
 
+
     <div class="row d-flex align-items-start justify-content-evenly text-size-md ">
         <div class="row " id="main_from">
             <div class="col-lg-4">
@@ -30,7 +31,18 @@
                     <input type="text" name="address" class="form-control shadow-none" required id="">
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label for="" class="form-label">Catégorie</label>
+                    <select class="form-select" name="category_id">
+                        @foreach ($categs as $item)
+                            <option value="{{ $item->id }}">{{ $item->label }}</option>
+                        @endforeach
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label for="" class="form-label">Région</label>
                     <select class="form-select" name="governorate_id">
@@ -41,7 +53,7 @@
 
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <label for="" class="form-label">Source</label>
                     <select class="form-select" name="source_id">
@@ -260,7 +272,9 @@
                 $("#formOrder").trigger("reset");
                 $("#prod_container").html("")
                 Swal.fire("Succès", "Commande bien enregistré", "success")
-                $("#table_order_container").load("{{ route('orders.table') }}")
+                $("#table_order_container").load(
+                    "{{ route('orders.table', ['cat' => 0, 'stat' => 0, 'reg' => 0, 'search' => 'all']) }}"
+                )
 
             })
             .catch(err => {

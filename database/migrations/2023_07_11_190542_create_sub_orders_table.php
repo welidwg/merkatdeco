@@ -16,11 +16,12 @@ class CreateSubOrdersTable extends Migration
         Schema::create('sub_orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId("order_id")->references("id")->on("orders")->onDelete("cascade");
-            $table->string("subcontractor");
             $table->double("phone")->nullable();
             $table->text("pieces");
             $table->date("start_date");
+            $table->date("predicted_date")->nullable();
             $table->date("end_date")->nullable();
+            $table->integer("advance")->default(0);
             $table->timestamps();
         });
     }

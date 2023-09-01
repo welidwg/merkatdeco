@@ -64,7 +64,7 @@
                             @php
                                 $countCmd = Order::countReady();
                             @endphp
-                            <div class="text-dark fw-bold h5 mb-2"><span>{{ $countCmd }}
+                            <div class="text-dark fw-bold h5 mb-2"><span>{{ $countCmd ? $countCmd : 0 }}
                                 </span>
                             </div>
 
@@ -105,18 +105,19 @@
                             </div>
                             @php
                                 $total = 0;
-                                
-                                foreach ($deliveries as $delivery) {
-                                    foreach (json_decode($delivery->order->products) as $pr) {
-                                        $prod = Product::find($pr->id);
-                                        if ($prod) {
-                                            foreach (json_decode($prod->measures) as $mes) {
-                                                if ($mes->measure == $pr->measure) {
-                                                    $total += $mes->price * $pr->qte;
+                                if ($deliveries->count() > 0) {
+                                    foreach ($deliveries as $delivery) {
+                                        foreach (json_decode($delivery->order->products) as $pr) {
+                                            $prod = Product::find($pr->id);
+                                            if ($prod) {
+                                                foreach (json_decode($prod->measures) as $mes) {
+                                                    if ($mes->measure == $pr->measure) {
+                                                        $total += $mes->price * $pr->qte;
+                                                    }
                                                 }
                                             }
+                                            # code...
                                         }
-                                        # code...
                                     }
                                 }
                             @endphp
@@ -147,22 +148,23 @@
                         
                         $regions = Governorate::all();
                         $regions_labels = [];
+                        if ($regions->count() > 0) {
+                            foreach ($regions as $region) {
+                                $count = 0;
+                                array_push($regions_labels, $region->label);
                         
-                        foreach ($regions as $region) {
-                            $count = 0;
-                            array_push($regions_labels, $region->label);
-                        
-                            foreach ($orders as $order) {
-                                if ($order->governorate->id == $region->id) {
-                                    $count++;
+                                foreach ($orders as $order) {
+                                    if ($order->governorate->id == $region->id) {
+                                        $count++;
+                                    }
                                 }
+                                array_push($numbers, $count);
                             }
-                            array_push($numbers, $count);
                         }
                         
                     @endphp
                     <script type="text/javascript">
-                        var labels = {!! json_encode($regions_labels) !!};
+                        var labels = {!! $regions_labels != null ? json_encode($regions_labels) : [] !!};
                         var counts = {!! json_encode($numbers) !!}
                         var backgroundColors = labels.map(label => getRandomColor(0.8));
 
@@ -211,22 +213,23 @@
                         
                         $regions = Governorate::all();
                         $regions_labels = [];
+                        if ($regions->count() > 0) {
+                            foreach ($regions as $region) {
+                                $count = 0;
+                                array_push($regions_labels, $region->label);
                         
-                        foreach ($regions as $region) {
-                            $count = 0;
-                            array_push($regions_labels, $region->label);
-                        
-                            foreach ($deliveries as $delivery) {
-                                if ($delivery->order->governorate->id == $region->id) {
-                                    $count++;
+                                foreach ($deliveries as $delivery) {
+                                    if ($delivery->order->governorate->id == $region->id) {
+                                        $count++;
+                                    }
                                 }
+                                array_push($numbers, $count);
                             }
-                            array_push($numbers, $count);
                         }
                         
                     @endphp
                     <script type="text/javascript">
-                        var labels = {!! json_encode($regions_labels) !!};
+                        var labels = {!! $regions_labels != null ? json_encode($regions_labels) : [] !!};
                         var counts = {!! json_encode($numbers) !!}
                         console.log(counts);
                         const data = {

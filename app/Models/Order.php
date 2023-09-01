@@ -22,7 +22,7 @@ class Order extends Model
         if ($status) {
             return self::where('status_id', $status->id)->count();
         }
-        return [];
+        return null;
     }
 
 

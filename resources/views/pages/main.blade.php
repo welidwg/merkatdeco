@@ -229,8 +229,8 @@
                         
                     @endphp
                     <script type="text/javascript">
-                        var labels = {!! $regions_labels != null ? json_encode($regions_labels) : [] !!};
-                        var counts = {!! $numbers != null ? json_encode($numbers) : [] !!}
+                        var labels = {!! $regions_labels != null ? json_encode($regions_labels) : json_encode([]) !!};
+                        var counts = {!! $numbers != null ? json_encode($numbers) : json_encode([]) !!}
                         console.log(counts);
                         const data = {
                             labels: labels,

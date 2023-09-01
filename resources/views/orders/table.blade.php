@@ -91,14 +91,17 @@
 
                 <td>
                     <form action="{{ secure_url(Url::route('orders.destroy', $order)) }}" method="POST"
-                        class="d-flex align-items-center " id="form_delete_order{{ $order->id }}">
+                        class="d-flex align-items-center justify-content-center "
+                        id="form_delete_order{{ $order->id }}">
                         @csrf
                         @method('DELETE')
                         <a data-bs-toggle="offcanvas" data-bs-target="#canvas_{{ $order->id }}"
                             class="text-primary "><i class="far fa-eye "></i></a>
                         @if (Auth::user()->role == 0)
+                            <a data-bs-toggle="offcanvas" data-bs-target="#canvas_suborder_{{ $order->id }}"
+                                class="text-info mx-2"><i class="far fa-plus "></i></a>
                             <button onclick="return confirm('Vous êtes sûr ?')" type="submit" href="#"
-                                class="text-danger btn"><i class="far fa-times-circle "></i></i></button>
+                                class="text-danger btn p-0"><i class="far fa-times-circle "></i></i></button>
                         @endif
                     </form>
                     <script>
@@ -302,7 +305,7 @@
                                         </div>
                                         <div class="mb-3 rounded-2 p-3 shadow-sm prod_container" id="prod_container">
                                             <div class="row mb-2 ">
-                                                <div class="col-9 col-lg-8">
+                                                {{-- <div class="col-9 col-lg-8">
                                                     <label for="" class="form-label">Nom et
                                                         dimensions</label>
 
@@ -313,24 +316,91 @@
 
                                                     </div>
 
-                                                </div>
+                                                </div> --}}
+
                                                 @php
                                                     $total = 0;
                                                 @endphp
-                                                @foreach (json_decode($order->products) as $p)
-                                                    @php
-                                                        $prod = Product::find($p->id);
-                                                        $price = 0;
-                                                        foreach (json_decode($prod->measures) as $mes) {
-                                                            if ($mes->measure == $p->measure) {
-                                                                $price = $mes->price;
-                                                                break;
+                                                <div class="accordion accordion-flush"
+                                                    id="products_order_{{ $order->id }}">
+                                                    @foreach (json_decode($order->products) as $p)
+                                                        @php
+                                                            $prod = Product::find($p->id);
+                                                            $price = 0;
+                                                            foreach (json_decode($prod->measures) as $mes) {
+                                                                if ($mes->measure == $p->measure) {
+                                                                    $price = $mes->price;
+                                                                    break;
+                                                                }
                                                             }
-                                                        }
-                                                        
-                                                    @endphp
-                                                    <div class="row mb-2 ">
-                                                        <div class="col-9 col-lg-8"> <input readonly type="text"
+                                                            
+                                                        @endphp
+
+                                                        <div class="accordion-item ">
+                                                            <h2 class="accordion-header "
+                                                                id="product_heading_{{ $order->id }}_{{ $p->id }}">
+                                                                <button
+                                                                    class="accordion-button collapsed border-2 text-size-md"
+                                                                    type="button" data-bs-toggle="collapse"
+                                                                    data-bs-target="#product_{{ $order->id }}_{{ $p->id }}"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="flush-collapseOne">
+                                                                    <strong>{{ $prod->title }}</strong>
+                                                                </button>
+                                                            </h2>
+                                                            <div id="product_{{ $order->id }}_{{ $p->id }}"
+                                                                class="accordion-collapse collapse"
+                                                                aria-labelledby="flush-headingOne"
+                                                                data-bs-parent="#products_order_{{ $order->id }}_{{ $p->id }}">
+                                                                <div class="accordion-body">
+                                                                    @php
+                                                                        $total += $price * $p->qte;
+                                                                    @endphp
+                                                                    <div class="d-flex flex-column">
+                                                                        <div
+                                                                            class="d-flex justify-content-between mb-2">
+                                                                            <strong>Mésure :
+                                                                            </strong><span>{{ $p->measure }}</span>
+                                                                        </div>
+                                                                        <div
+                                                                            class="d-flex justify-content-between mb-2">
+                                                                            <strong>Couleur :
+                                                                            </strong><span>{{ $p->color }}</span>
+                                                                        </div>
+                                                                        <div
+                                                                            class="d-flex justify-content-between mb-2">
+                                                                            <strong>Prix unitaire :
+                                                                            </strong><span>{{ $price }}
+                                                                                TND</span>
+                                                                        </div>
+                                                                        <div
+                                                                            class="d-flex justify-content-between mb-2">
+                                                                            <strong>Quantité :
+                                                                            </strong><span>
+                                                                                <input type="number"
+                                                                                    placeholder="quantité"
+                                                                                    min="1"
+                                                                                    {{ Auth::user()->role != 0 ? 'readonly' : '' }}
+                                                                                    name="qtes_prod{{ $order->id }}[]"
+                                                                                    required
+                                                                                    value="{{ $p->qte }}"
+                                                                                    class="form-control text-size-md  shadow-none w-50 float-end">
+                                                                            </span>
+                                                                        </div>
+                                                                        <div
+                                                                            class="d-flex justify-content-between mb-2">
+                                                                            <strong>Total :
+                                                                            </strong><span>{{ $price * $p->qte }}
+                                                                                TND</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        {{-- <div class="col-9 col-lg-8"> <input readonly type="text"
                                                                 name="titles_prod[]"
                                                                 value="{{ $prod->title . ' (' . $p->measure . ') ' . $p->color }}"
                                                                 class="form-control bg-light text-size-md shadow-none">
@@ -353,7 +423,7 @@
 
 
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
 
                                                         <input type="hidden" name="ids{{ $order->id }}[]"
                                                             value="{{ $p->id }}"
@@ -362,8 +432,8 @@
                                                             name="measures_prods{{ $order->id }}[]">
                                                         <input type="hidden" value="{{ $p->color }}"
                                                             name="colors_prods{{ $order->id }}[]">
-                                                    </div>
-                                                @endforeach
+                                                    @endforeach
+                                                </div>
                                                 <hr>
                                                 <span class="text-end"><span class="form-label">Total</span> :
                                                     {{ $total }} TND</span>
@@ -457,7 +527,7 @@
     <div class="offcanvas offcanvas-end text-size-md text-dark" data-bs-scroll="true" tabindex="-1"
         style="width:700px !important;" id="canvas_suborder_{{ $order->id }}">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="">Nouvelle prestation
+            <h5 class="offcanvas-title" id="">Nouvelle prestation pour commnande {{ $order->id }}
             </h5>
             <button type="button" class="btn-close" href="#canvas_{{ $order->id }}" data-bs-toggle="offcanvas"
                 aria-label="Close"></button>

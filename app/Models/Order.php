@@ -20,7 +20,8 @@ class Order extends Model
     {
         $status = Status::where("label", "Prête")->first();
         if ($status) {
-            return self::where('status_id', $status->id)->count();
+            return self::where('status_id', $status->id)->whereMonth('order_date', date('m'))
+                ->whereYear('order_date', date('Y'))->count();
         }
         return null;
     }

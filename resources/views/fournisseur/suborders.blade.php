@@ -258,19 +258,21 @@
                                                         {{ $total }}
                                                         TND</span>
                                                 </div>
-                                                <div class="d-flex justify-content-between align-items-center ">
-                                                    <div>
-                                                        <button class="btn btn-info text-light text-size-md mx-2"
-                                                            type="submit">Enregistrer</button>
-                                                    </div>
-                                                    <div>
-                                                        <a class="btn btn-success text-light text-size-md mx-2"
-                                                            id="prete{{ $sub->id }}">Prête</a>
+                                                @if ($sub->status->label != 'Prête')
+                                                    <div class="d-flex justify-content-between align-items-center ">
+                                                        <div>
+                                                            <button class="btn btn-info text-light text-size-md mx-2"
+                                                                type="submit">Enregistrer</button>
+                                                        </div>
+                                                        <div>
+                                                            <a class="btn btn-success text-light text-size-md mx-2"
+                                                                id="prete{{ $sub->id }}">Prête</a>
 
-                                                        <a class="btn btn-danger text-light text-size-md mx-2"
-                                                            id="cancel{{ $sub->id }}">Annulée</a>
+                                                            <a class="btn btn-danger text-light text-size-md mx-2"
+                                                                id="cancel{{ $sub->id }}">Annulée</a>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @endif
                                                 <script>
                                                     $("#prete{{ $sub->id }}").on("click", (e) => {
                                                         if (confirm("Vous êtes sûr que cette prestation est prête ?")) {

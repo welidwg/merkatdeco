@@ -14,7 +14,7 @@ class AuthController extends Controller
         try {
             $cred = ["login" => $req->login, "password" => $req->password];
             if (Auth::attempt($cred)) {
-                return response(json_encode(["type" => "success", "message" => "Bien connecté", "user" => Auth::user(), "id" => Auth::user()->id]), 200);
+                return response(json_encode(["type" => "success", "message" => "Bien connecté", "user" => Auth::user(), "role" => Auth::user()->role]), 200);
             } else {
                 return response(json_encode(["type" => "error", "message" => "Login ou mot de passe non valides !"]), 500);
             }

@@ -76,8 +76,21 @@
                 $("#user_auth_form").trigger("reset");
                 $("#spinner").fadeOut();
                 setTimeout(() => {
-                    window.location.href = "/main";
+                    switch (res.data.role) {
+                        case 0:
+                            window.location.href = "/main";
+                            break;
+                        case 1:
+                            window.location.href = "/deliveries";
+                            break;
+                        case 2:
+                            window.location.href = "/prestations";
+                            break;
+                        default:
+                            break;
+                    }
                 }, 600);
+                console.log(res.data.role);
 
             })
             .catch((err) => {

@@ -12,6 +12,16 @@
         </a>
         <hr class="sidebar-divider my-0" />
         <ul id="accordionSidebar" class="navbar-nav text-light">
+            @if (Auth::user()->role == 0)
+                <li class="nav-item">
+                    <a class="nav-link  
+                     {{ Route::currentRouteName() == 'main' ? 'active' : '' }}
+                     "
+                        href="{{ route('main') }}">
+                        <i class="fas fa-home"></i><span>Accueil</span></a>
+
+                </li>
+            @endif
             @if (Auth::user()->role == 2)
                 <li class="nav-item">
                     <a class="nav-link  
@@ -22,22 +32,9 @@
 
                 </li>
             @endif
-            <li class="nav-item">
-                <a class="nav-link  
-                     {{ Route::currentRouteName() == 'main' ? 'active' : '' }}
-                     "
-                    href="{{ route('main') }}">
-                    <i class="fas fa-home"></i><span>Accueil</span></a>
 
-            </li>
-            <li class="nav-item">
-                <a class="nav-link  
-                     {{ Route::currentRouteName() == 'orders.index' ? 'active' : '' }}
-                     "
-                    href="{{ route('orders.index') }}">
-                    <i class="fas fa-clipboard-list"></i><span>Commandes</span></a>
 
-            </li>
+
             @if (Auth::user()->role == 0 || Auth::user()->role == 1)
                 <li class="nav-item">
                     <a class="nav-link  
@@ -45,6 +42,14 @@
                      "
                         href="{{ route('deliveries.index') }}">
                         <i class="fas fa-truck-container "></i><span>Livraisons</span></a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  
+                     {{ Route::currentRouteName() == 'orders.index' ? 'active' : '' }}
+                     "
+                        href="{{ route('orders.index') }}">
+                        <i class="fas fa-clipboard-list"></i><span>Commandes</span></a>
 
                 </li>
             @endif

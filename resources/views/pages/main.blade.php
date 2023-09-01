@@ -165,7 +165,7 @@
                     @endphp
                     <script type="text/javascript">
                         var labels = {!! $regions_labels != null ? json_encode($regions_labels) : [] !!};
-                        var counts = {!! json_encode($numbers) !!}
+                        var counts = {!! $numbers != null ? json_encode($numbers) : [] !!}
                         var backgroundColors = labels.map(label => getRandomColor(0.8));
 
                         const data_cmd = {
@@ -230,7 +230,7 @@
                     @endphp
                     <script type="text/javascript">
                         var labels = {!! $regions_labels != null ? json_encode($regions_labels) : [] !!};
-                        var counts = {!! json_encode($numbers) !!}
+                        var counts = {!! $numbers != null ? json_encode($numbers) : [] !!}
                         console.log(counts);
                         const data = {
                             labels: labels,

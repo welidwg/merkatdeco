@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\Delivery;
+use App\Models\Delivery_status;
 use App\Models\Governorate;
 use App\Models\Order;
 use App\Models\orderCategorie;
@@ -117,7 +118,7 @@ class OrderController extends Controller
                 }
             }
             if ($status && $status->label == "Livrée") {
-                Delivery::create(["order_id" => $order->id, "delivery_date" => date("Y-m-d")]);
+                $check = Delivery::where("order_id", $order->id)->first();
             }
             return response(json_encode(["success" => "done"]), 200);
         } catch (\Throwable $th) {

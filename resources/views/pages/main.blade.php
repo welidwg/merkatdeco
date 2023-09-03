@@ -13,9 +13,9 @@
         ->get();
     $status_termine = Delivery_status::where('label', 'like', '%Terminée%')->first();
     
-    $deliveries = Delivery::whereMonth('affected_date', date('m'))
-        ->whereYear('affected_date', date('Y'))
-        ->where('status_id', $status_termine)
+    $deliveries = Delivery::whereMonth('end_date', date('m'))
+        ->whereYear('end_date', date('Y'))
+        ->where('status_id', $status_termine->id)
         ->get();
 @endphp
 @section('content')
@@ -28,7 +28,7 @@
         }
     </script>
     <div class="d-sm-flex justify-content-between align-items-center mb-4">
-        <h3 class="text-dark mb-0">Statistiques du mois {{ date('M') }}</h3>
+        <h3 class="text-dark mb-0">Statistiques du mois {{ date('M') }} </h3>
         {{-- <a class="btn btn-primary btn-sm d-none d-sm-inline-block"
                 role="button" href="#"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> --}}
     </div>

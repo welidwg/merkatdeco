@@ -197,12 +197,20 @@
                                                                         id="">
                                                                 </div>
                                                                 <div class="col-6 col-lg-5">
-                                                                    <input type="text" min="1"
-                                                                        name="desc_pieces_{{ $sub->id }}[]"
-                                                                        placeholder="description"
-                                                                        value="{{ $piece->desc }}"
-                                                                        class="form-control   text-size-md shadow-none  mb-3"
-                                                                        id="">
+
+                                                                    <div class=" d-flex align-items-center">
+                                                                        <input type="text" min="1"
+                                                                            name="desc_pieces_{{ $sub->id }}[]"
+                                                                            placeholder="description"
+                                                                            value="{{ $piece->desc }}"
+                                                                            class="form-control   text-size-md shadow-none  mb-3"
+                                                                            id="">
+                                                                        <span onclick="RemoveParent(this)"
+                                                                            class="my-auto text-danger"><i
+                                                                                class="fas fa-times"
+                                                                                aria-hidden="true"></i></span>
+                                                                    </div>
+
                                                                 </div>
                                                                 <hr class="d-lg-none">
                                                                 @php
@@ -320,7 +328,7 @@
                                                 var qte = qteInputs[i].value;
                                                 var price = priceInputs[i].value;
                                                 var desc = descInputs[i].value;
-                                                if (qte != "" && piece != "" && price != "" && desc != "") {
+                                                if (qte != "" && piece != "" && price != "") {
                                                     mergedArray.push({
                                                         piece: piece,
                                                         qte: qte,

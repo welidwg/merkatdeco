@@ -1,4 +1,4 @@
-<table class="table my-0 " id="table_index_releve" style="table-layout: fixed">
+<table class="table my-0 " id="table_index_pr" style="table-layout: fixed">
     <thead>
         <tr>
             <th>Titre</th>
@@ -337,6 +337,11 @@
     </script>
 @endforeach
 <script>
+    $("#table_index_pr").dataTable({
+        searching: true,
+        info: false
+    })
+
     function RemoveParent(e) {
         $(e).parent().parent().parent().remove()
     }

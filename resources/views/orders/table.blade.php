@@ -8,7 +8,7 @@
     use Illuminate\Support\Facades\URL;
 @endphp
 
-<table class="table my-0 " id="table_index_releve" style="table-layout: auto">
+<table class="table my-0 " id="table_index_ordeer" style="table-layout: auto">
     {{-- {{ $cat }} --}}
     <thead>
         <tr>
@@ -30,6 +30,7 @@
             @endif
             <th>Date</th>
             <th>Action</th>
+            <th class="visually-hidden"></th>
         </tr>
     </thead>
     <tbody>
@@ -1018,6 +1019,10 @@
     </div>
 </div>
 <script>
+    $("#table_index_ordeer").dataTable({
+        searching: false,
+        info: false
+    })
     $("#confirm_delivery").on("click", (e) => {
         let user_id = $("#deliverer_id").val();
         var ids = [];

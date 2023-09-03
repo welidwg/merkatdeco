@@ -131,3 +131,9 @@
         </div>
     </div>
 @endforeach
+<script>
+    $("#table_index_accounts").dataTable({
+        searching: true,
+        info: false
+    })
+</script>

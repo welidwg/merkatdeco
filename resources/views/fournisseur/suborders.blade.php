@@ -288,7 +288,9 @@
                                                                     status: "done",
                                                                 })
                                                                 .then(res => {
-                                                                    console.log(res)
+                                                                    setTimeout(() => {
+                                                                        window.location.reload()
+                                                                    }, 700);
                                                                 })
                                                                 .catch(err => {
                                                                     console.error(err);
@@ -303,6 +305,9 @@
                                                                 })
                                                                 .then(res => {
                                                                     console.log(res)
+                                                                    setTimeout(() => {
+                                                                        window.location.reload()
+                                                                    }, 700);
                                                                 })
                                                                 .catch(err => {
                                                                     console.error(err);

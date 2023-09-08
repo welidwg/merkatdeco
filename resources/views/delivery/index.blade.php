@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive table mt-2 border-0" role="grid" aria-describedby="">
-                <table class="table my-0 " id="table_index_releve" style="table-layout: auto">
+                <table class="table my-0 " id="table_index_del" style="table-layout: auto">
                     <thead>
                         <tr>
                             <th>#Id</th>
@@ -313,5 +313,30 @@
             $(e).parent().parent().parent().remove()
         }
         $("input,select,option,label").addClass("shadow-none text-size-md");
+        $.extend(true, $.fn.dataTable.defaults, {
+
+            "language": {
+                "search": "Rechercher:",
+
+                "paginate": {
+                    "first": "Premier",
+                    "last": "Dernier",
+                    "next": "Suivant",
+                    "previous": "Précédent"
+                },
+                "decimal": ".",
+                "emptyTable": "Aucun ligne ",
+                "info": "",
+                "infoFiltered": "",
+                "infoEmpty": "",
+                "lengthMenu": "",
+
+            },
+
+        });
+        $("#table_index_del").dataTable({
+            searching: true,
+            info: false
+        })
     </script>
 @endsection

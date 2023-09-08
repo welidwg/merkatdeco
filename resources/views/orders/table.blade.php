@@ -512,6 +512,13 @@
             <tr>
                 <td></td>
                 <td>Aucune commande</td>
+                @php
+                    $count = Auth::user()->role == 0 ? 10 : 7;
+                    
+                @endphp
+                @for ($i = 0; $i < $count; $i++)
+                    <td></td>
+                @endfor
             </tr>
         @endforelse
 
@@ -998,7 +1005,7 @@
 
             </div>
             <div class="modal-body">
-                <span>Affecter <span id="ces"></span> aux : </span>
+                <span>Affecter <span id="ces"></span> au : </span>
                 @php
                     $users = new Account();
                     $fournisseurs = $users->getDeliverer();

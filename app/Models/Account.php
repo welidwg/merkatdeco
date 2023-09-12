@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Account extends Authenticatable
 {
@@ -30,5 +31,10 @@ class Account extends Authenticatable
     public function getDeliverer()
     {
         return $this->query()->where("role", "=", 1)->get();
+    }
+
+    function prestations(): HasMany
+    {
+        return $this->hasMany(SubOrder::class, "user_id");
     }
 }

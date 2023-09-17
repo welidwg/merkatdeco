@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\SendNotification;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\DeliveryStatusController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\GovernorateController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderCategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\SubOrderController;
 use App\Http\Middleware\cors;
 use App\Models\Delivery_status;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\SubOrder;
@@ -84,7 +87,15 @@ Route::group(["middleware" => ["auth"]], function () {
     Route::resource("accounts", AccountController::class);
 
     Route::resource("delivery_status", DeliveryStatusController::class);
+    Route::resource("notifications", NotificationController::class);
 
     Route::get("prestations", [FournisseurController::class, "index"])->name("prestations");
+    Route::get("event", function () {
+        $title = "Nouvelle tache";
+        $content = "Vous avez une nouvelle tâche";
+        $user_id = 8;
+        $notif = Notification::create(["title" => $title, "content" => $content, "user_id" => $user_id]);
+        event(new SendNotification($notif, $user_id));
+    });
     Route::post("prestations/{id}", [FournisseurController::class, "statusUpdate"])->name("prestations.statusUpdate");
 });

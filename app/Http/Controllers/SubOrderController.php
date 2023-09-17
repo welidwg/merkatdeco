@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SendNotification;
+use App\Models\Notification;
 use App\Models\Product;
 use App\Models\Status;
 use App\Models\SubOrder;
@@ -39,7 +41,15 @@ class SubOrderController extends Controller
     {
         //
         try {
-            SubOrder::create($request->all());
+            $sub = SubOrder::create($request->all());
+            if ($sub) {
+                $title = "Nouvelle tache";
+                $content = "Vous avez une nouvelle tâche";
+                $user_id = $sub->user_id;
+                $notif = Notification::create(["title" => $title, "content" => $content, "user_id" => $user_id]);
+
+                event(new SendNotification($notif,$user_id));
+            }
             return response(json_encode(["success" => "done"]), 201);
         } catch (\Throwable $th) {
             return response(json_encode(["error" => $th->getMessage()]), 500);
@@ -83,6 +93,7 @@ class SubOrderController extends Controller
             $data = $request->all();
             $status = Status::find($request->status_id);
             if ($status->label == "Prête") {
+                
                 $data["end_date"] = date("Y-m-d");
                 $count = count($sub->order->sub_orders);
                 if ($count == 1) {

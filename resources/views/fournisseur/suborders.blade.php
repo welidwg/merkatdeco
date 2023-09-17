@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive table mt-2 border-0" role="grid" aria-describedby="">
-                <table class="table my-0 " id="table_index_releve" style="table-layout: auto">
+                <table class="table my-0 " id="table_index_sub" style="table-layout: auto">
                     <thead>
                         <tr>
                             <th>#Id</th>
@@ -373,6 +373,29 @@
         </div>
     </div>
     <script>
+        $.extend(true, $.fn.dataTable.defaults, {
+
+            "language": {
+                "search": "Rechercher:",
+
+                "paginate": {
+                    "first": "Premier",
+                    "last": "Dernier",
+                    "next": "Suivant",
+                    "previous": "Précédent"
+                },
+                "decimal": ".",
+                "emptyTable": "Aucun ligne ",
+                "info": "",
+                "infoFiltered": "",
+                "infoEmpty": "",
+                "lengthMenu": "",
+
+            },
+
+        });
+        $("#table_index_sub").dataTable()
+
         function RemoveParent(e) {
             $(e).parent().parent().parent().remove()
         }

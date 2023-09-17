@@ -71,6 +71,9 @@ class DeliveryController extends Controller
                     }
                 }
             }
+            $nc = new NotificationController();
+            $data = ["title" => "Nouvelle livraison", "content" => "Vous avez des livraison en attente", "user_id" => $request->user_id];
+            $nc->sendNotif($data);
             return response(json_encode(["success" => $request->orders]), 201);
         } catch (\Throwable $th) {
             return response(json_encode(["error" => $th->getMessage()]), 500);
@@ -126,19 +129,28 @@ class DeliveryController extends Controller
     function statusUpdate($id, $status)
     {
         try {
+            $title = "Livraison terminée";
+            $action = "terminé";
             if ($status == "done") {
                 $stat = Delivery_status::where("label", "like", "%Terminée%")->first();
                 $stat_cmd = Status::where("label", "like", "%Livrée%")->first();
             } else {
                 $stat = Delivery_status::where("label", "like", "%Annulée%")->first();
-                $stat_cmd = Status::where("label", "like", "%Annulée%")->first();
+                $stat_cmd = Status::where("label", "like", "%Prête%")->first();
+                $title = "Livraison annulée";
+                $action = "annulé";
             }
             $delivery = Delivery::find($id);
             $delivery->update(["status_id" => $stat->id]);
+            $content = "Le livreur " . Auth::user()->login . " a $action sa livraison du commande #" . $delivery->order->id;
+
             if ($status == "done") {
                 $delivery->update(["end_date" => date("Y-m-d")]);
             }
             $delivery->order->update(["status_id" => $stat_cmd->id]);
+            $nc = new NotificationController();
+            $data = ["title" => $title, "content" => $content, "to_role" => 0];
+            $nc->sendNotif($data);
             return response(json_encode(["success" => "done"]), 200);
         } catch (\Throwable $th) {
             return response(json_encode(["error" => $th->getMessage()]), 500);

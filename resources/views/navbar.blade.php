@@ -16,9 +16,54 @@
                     $("#time").html(moment().format(' H:mm:ss '))
 
                 }, 500);
+                const PUSHER_KEY = "33ae8c9470ab8fad0744";
+                Pusher.logToConsole = false;
+                const pusher = new Pusher(PUSHER_KEY, {
+                    cluster: "eu",
+                });
+                const channel = pusher.subscribe(`notif-{{ Auth::id() }}`);
+                const channel_role = pusher.subscribe(`role-{{ Auth::user()->role }}`);
+                channel.bind("pusher:subscription_succeeded", function(members) {
+                    console.log("notif user");
+                });
+                channel_role.bind("pusher:subscription_succeeded", function(members) {
+                    console.log("role notif");
+                });
+                channel.bind("getNotif", (data) => {
+                    console.log(data);
+                    $("#notifContent").load("{{ route('notifications.index') }}")
+
+                });
+                channel_role.bind("getNotifRole", (data) => {
+                    console.log(data);
+                    $("#notifContent").load("{{ route('notifications.index') }}")
+                  
+
+                });
             </script>
         </div>
-        <ul class="navbar-nav flex-nowrap ms-auto">
+        <ul class="navbar-nav flex-nowrap ms-auto align-items-center">
+            <li class="nav-item dropdown no-arrow">
+                <div class="nav-item dropdown no-arrow">
+                    <a href="#" data-bs-toggle="dropdown" class="dropdown-toggle nav-link text-primary"><span><i
+                                class="fas fa-bell" aria-hidden="true"></i></span></a>
+                    <div class="dropdown-menu shadow  animated--grow-in notifContainer text-size-md">
+                        <div class="d-flex justify-content-between dropdown-header">
+                            <h6 class="text-primary fw-bold">Notifications</h6>
+                            <a href="#" class="text-danger"><i class="fal fa-trash" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="notifContent" id="notifContent">
+
+
+                        </div>
+                        <script>
+                            $("#notifContent").load("{{ route('notifications.index') }}")
+                        </script>
+
+                    </div>
+                </div>
+
+            </li>
 
             <li class="nav-item dropdown no-arrow">
                 <div class="nav-item dropdown no-arrow ">

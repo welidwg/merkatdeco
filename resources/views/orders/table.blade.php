@@ -142,7 +142,7 @@
                                     </script>
                              --}}
                 <td>
-                    @if ($order->status->label == 'Livrée')
+                    @if ($order->status->label == 'Livrée' && $order->delivery !== null)
                         <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1"
                             id="canvas_delivery_{{ $order->id }}"
                             aria-labelledby="Enable both scrolling & backdrop">
@@ -673,13 +673,14 @@
             var qteInputs = document.getElementsByName('qtes_pieces{{ $order->id }}[]');
             var priceInputs = document.getElementsByName('price_pieces_{{ $order->id }}[]');
             var descriptionInputs = document.getElementsByName('desc_pieces_{{ $order->id }}[]');
+            console.log(descriptionInputs.length);
             var mergedArray = [];
             for (var i = 0; i < pieceInputs.length; i++) {
                 var piece = pieceInputs[i].value;
                 var qte = qteInputs[i].value;
                 var price = priceInputs[i].value;
                 var desc = descriptionInputs[i].value;
-                if (qte != "" && piece != "" && price != "" && desc != "") {
+                if (qte != "" && piece != "" && price != "") {
                     mergedArray.push({
                         piece: piece,
                         qte: qte,
@@ -838,28 +839,28 @@
                                     @foreach (json_decode($sub->pieces) as $piece)
                                         <div class="row">
                                             <div class="col-6 col-lg-3">
-                                                <input type="text" name="pieces{{ $sub->id }}[]"
+                                                <input type="text" name="pieces{{ $sub->id * 31 }}[]"
                                                     placeholder="nom du pièce" value="{{ $piece->piece }}"
                                                     class="form-control shadow-none text-size-md  mb-3"
                                                     id="">
                                             </div>
                                             <div class="col-6 col-lg-2">
                                                 <input type="number" min="1"
-                                                    name="qtes_pieces{{ $sub->id }}[]" placeholder=""
+                                                    name="qtes_pieces{{ $sub->id * 31 }}[]" placeholder=""
                                                     value="{{ $piece->qte }}"
                                                     class="form-control   text-size-md shadow-none  mb-3"
                                                     id="">
                                             </div>
                                             <div class="col-6 col-lg-2">
                                                 <input type="number" min="1"
-                                                    name="price_pieces_{{ $sub->id }}[]" placeholder=""
+                                                    name="price_pieces_{{ $sub->id * 31 }}[]" placeholder=""
                                                     value="{{ $piece->price }}"
                                                     class="form-control   text-size-md shadow-none  mb-3"
                                                     id="">
                                             </div>
                                             <div class="col-6 col-lg-5">
                                                 <input type="text" min="1"
-                                                    name="desc_pieces{{ $sub->id }}[]"
+                                                    name="desc_pieces{{ $sub->id * 31 }}[]"
                                                     placeholder="description" value="{{ $piece->desc }}"
                                                     class="form-control   text-size-md shadow-none  mb-3"
                                                     id="">
@@ -914,10 +915,10 @@
                     })
                     $("#edit_suborder_form_{{ $sub->id }}").on("submit", (e) => {
                         e.preventDefault();
-                        var pieceInputs = document.getElementsByName('pieces{{ $sub->id }}[]');
-                        var qteInputs = document.getElementsByName('qtes_pieces{{ $sub->id }}[]');
-                        var priceInputs = document.getElementsByName('price_pieces_{{ $sub->id }}[]');
-                        var descInputs = document.getElementsByName('desc_pieces{{ $sub->id }}[]');
+                        var pieceInputs = document.getElementsByName('pieces{{ $sub->id * 31 }}[]');
+                        var qteInputs = document.getElementsByName('qtes_pieces{{ $sub->id * 31 }}[]');
+                        var priceInputs = document.getElementsByName('price_pieces_{{ $sub->id * 31 }}[]');
+                        var descInputs = document.getElementsByName('desc_pieces{{ $sub->id * 31 }}[]');
                         var mergedArray = [];
                         for (var i = 0; i < pieceInputs.length; i++) {
                             var piece = pieceInputs[i].value;

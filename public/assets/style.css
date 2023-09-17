@@ -69,6 +69,8 @@ table {
     .badge {
         font-size: 13px !important;
     }
+    .notifContainer {
+    }
 }
 
 @media (min-width: 768px) {
@@ -78,6 +80,11 @@ table {
     }
     .badge {
         font-size: 14px !important;
+    }
+    .notifContainer {
+        position: absolute;
+        width: 350px !important;
+        margin-left: -200px !important;
     }
 }
 
@@ -101,4 +108,9 @@ h5 {
     background-size: cover;
     z-index: -1 !important;
     filter: blur(10px);
+}
+.notifContent {
+    max-height: 300px !important;
+    height: 300px !important;
+    overflow: auto;
 }

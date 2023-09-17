@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotifRole;
+use App\Events\SendNotification;
+use App\Models\Notification;
 use App\Models\Product;
 use App\Models\Status;
 use App\Models\SubOrder;
@@ -19,6 +22,8 @@ class FournisseurController extends Controller
     {
         try {
             $sub = SubOrder::find($id);
+            $user = $sub->user;
+            $order = $sub->order;
             if ($req->status == "done") {
                 $status = Status::where("label", "like", "%Prête%")->first();
                 $sub->update(["end_date" => date("Y-m-d")]);
@@ -43,10 +48,21 @@ class FournisseurController extends Controller
                         }
                     }
                 }
-            } else
+                $title = "Prestation prête";
+                $content = "le fournisseur $user->login a terminé la prestation lié à la commande #$order->id";
+            } else {
                 $status = Status::where("label", "like", "%Annulée%")->first();
-            $sub->update(["status_id" => $status->id]);
-            return response(json_encode(["success" => "done"]), 201);
+
+                $title = "Prestation annulée";
+                $content = "le fournisseur $user->login a annulé la prestation lié à la commande #$order->id";
+            }
+            if ($sub->update(["status_id" => $status->id])) {
+                $role = 0;
+                $notif = Notification::create(["title" => $title, "content" => $content, "to_role" => $role]);
+
+                event(new NotifRole($notif, $role));
+                return response(json_encode(["success" => "done"]), 201);
+            }
         } catch (\Throwable $th) {
             return response(json_encode(["error" => $th->getMessage()]), 500);
         }

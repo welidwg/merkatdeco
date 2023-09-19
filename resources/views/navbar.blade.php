@@ -10,6 +10,8 @@
             <span class="mx-1 text-size-md d-flex align-items-center"><i class="far fa-clock"></i><span
                     id="time"></span></span>
             <script>
+                var audio = new Audio("{{ secure_asset('assets/notif.wav') }}");
+
                 $("#time").html(moment().format(' H:mm:ss '))
 
                 setInterval(() => {
@@ -28,16 +30,20 @@
                 });
                 channel_role.bind("pusher:subscription_succeeded", function(members) {
                     console.log("role notif");
+
                 });
                 channel.bind("getNotif", (data) => {
                     console.log(data);
                     $("#notifContent").load("{{ route('notifications.index') }}")
+                    audio.play()
+
 
                 });
                 channel_role.bind("getNotifRole", (data) => {
                     console.log(data);
                     $("#notifContent").load("{{ route('notifications.index') }}")
-                  
+                    audio.play()
+
 
                 });
             </script>

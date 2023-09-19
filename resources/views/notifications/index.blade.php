@@ -18,7 +18,9 @@
                     @method('PUT')
                     <span class="text-secondary " style="font-size: 13px"> Il y a 4
                         minutes</span>
-                    <button class="btn text-danger " style="font-size: 13px"><i class="far fa-trash"></i></button>
+                    @if ($notif->user_id !== null)
+                        <button class="btn text-danger " style="font-size: 13px"><i class="far fa-trash"></i></button>
+                    @endif
                 </form>
             </div>
         </div>

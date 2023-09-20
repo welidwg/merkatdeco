@@ -56,13 +56,36 @@
                     <div class="dropdown-menu shadow  animated--grow-in notifContainer text-size-md">
                         <div class="d-flex justify-content-between dropdown-header">
                             <h6 class="text-primary fw-bold">Notifications</h6>
-                            <a href="#" class="text-danger"><i class="fal fa-trash" aria-hidden="true"></i></a>
+                            <form action="{{ route('notif.empty') }}" id="emptyNotif">
+                                @csrf
+                                @method('DELETE')
+                                <button href="#" class="text-danger btn p-0"><i class="fal fa-trash"
+                                        aria-hidden="true"></i></button>
+
+                            </form>
                         </div>
                         <div class="notifContent" id="notifContent">
 
 
                         </div>
                         <script>
+                            $("#emptyNotif").on("submit", (e) => {
+                                e.preventDefault();
+                                axios.put(e.target.action, {
+                                        user_id: {{ Auth::id() }},
+                                        role: {{ Auth::user()->role }},
+                                    })
+                                    .then(res => {
+                                        // console.log(res.data)
+                                        $("#notifContent").load("{{ route('notifications.index') }}")
+
+                                    })
+                                    .catch(err => {
+                                        console.error(err);
+                                        Swal.fire("Erreur", "L'operation est échouée", "error")
+                                    })
+
+                            })
                             $("#notifContent").load("{{ route('notifications.index') }}")
                         </script>
 

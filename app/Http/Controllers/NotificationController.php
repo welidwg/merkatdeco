@@ -84,6 +84,26 @@ class NotificationController extends Controller
     public function destroy(Notification $notification)
     {
         //
+        $notification->delete();
+        return response($notification->id, 201);
+    }
+    public function empty(Request $request)
+    {
+        try {
+            if ($request->role == 0) {
+                $notifs = Notification::where("to_role", 0)->get();
+            } else {
+                $notifs = Notification::where("user_id", $request->user_id)->get();
+            }
+            if ($notifs) {
+                foreach ($notifs as $notif) {
+                    $notif->delete();
+                }
+            }
+            return response($request->all(), 201);
+        } catch (\Throwable $th) {
+            return response($th->getMessage(), 500);
+        }
     }
 
     function sendNotif($data)

@@ -87,6 +87,8 @@ Route::group(["middleware" => ["auth"]], function () {
     Route::resource("accounts", AccountController::class);
 
     Route::resource("delivery_status", DeliveryStatusController::class);
+    Route::put("notifications/empty", [NotificationController::class, "empty"])->name("notif.empty");
+
     Route::resource("notifications", NotificationController::class);
 
     Route::get("prestations", [FournisseurController::class, "index"])->name("prestations");

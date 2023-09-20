@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotifRole;
 use App\Events\SendNotification;
 use App\Models\Notification;
 use App\Models\Product;
 use App\Models\Status;
 use App\Models\SubOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubOrderController extends Controller
 {
@@ -48,7 +50,7 @@ class SubOrderController extends Controller
                 $user_id = $sub->user_id;
                 $notif = Notification::create(["title" => $title, "content" => $content, "user_id" => $user_id]);
 
-                event(new SendNotification($notif,$user_id));
+                event(new SendNotification($notif, $user_id));
             }
             return response(json_encode(["success" => "done"]), 201);
         } catch (\Throwable $th) {
@@ -88,12 +90,13 @@ class SubOrderController extends Controller
     public function update(Request $request, SubOrder $subOrder)
     {
         try {
+            $role = Auth::user()->role;
             $id = $request->sub_id;
             $sub = SubOrder::find($id);
             $data = $request->all();
             $status = Status::find($request->status_id);
             if ($status->label == "Prête") {
-                
+
                 $data["end_date"] = date("Y-m-d");
                 $count = count($sub->order->sub_orders);
                 if ($count == 1) {
@@ -116,7 +119,18 @@ class SubOrderController extends Controller
                     }
                 }
             }
-            $sub->update($data);
+            if ($sub->update($data)) {
+                $title = "Prestation modifié";
+                $role == 0 ? $content = "L'administrateur a modifié la prestation #" . $sub->id
+                    : $content = "Le founisseur " . Auth::user()->login . " a mis à jour sa prestation liée à la commande #" . $sub->order->id;
+
+                $ncr = new NotificationController();
+                if ($role == 0) {
+                    $ncr->sendNotif(["title" => $title, "content" => $content, "user_id" => $sub->user->id]);
+                } else {
+                    $ncr->sendNotif(["title" => $title, "content" => $content, "to_role" => 0]);
+                }
+            }
             return response(json_encode(["success" => "done"]), 200);
         } catch (\Throwable $th) {
             return response(json_encode(["error" => $th->getMessage()]), 500);

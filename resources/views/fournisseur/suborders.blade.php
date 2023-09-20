@@ -1,6 +1,6 @@
 @extends('base')
 @section('title')
-    {{ env('prestation') }}
+    {{ env('prestation', 'Prestations') }}
 @endsection
 @php
     use App\Models\Status;

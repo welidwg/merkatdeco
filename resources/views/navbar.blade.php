@@ -11,6 +11,7 @@
                     id="time"></span></span>
             <script>
                 var audio = new Audio("{{ secure_asset('assets/notif.wav') }}");
+                var message_audio = new Audio("{{ secure_asset('assets/message.wav') }}");
 
                 $("#time").html(moment().format(' H:mm:ss '))
 
@@ -19,17 +20,17 @@
 
                 }, 500);
                 const PUSHER_KEY = "33ae8c9470ab8fad0744";
-                Pusher.logToConsole = false;
+                Pusher.logToConsole = true;
                 const pusher = new Pusher(PUSHER_KEY, {
                     cluster: "eu",
                 });
                 const channel = pusher.subscribe(`notif-{{ Auth::id() }}`);
                 const channel_role = pusher.subscribe(`role-{{ Auth::user()->role }}`);
                 channel.bind("pusher:subscription_succeeded", function(members) {
-                    console.log("notif user");
+                    // console.log("notif user");
                 });
                 channel_role.bind("pusher:subscription_succeeded", function(members) {
-                    console.log("role notif");
+                    // console.log("role notif");
 
                 });
                 channel.bind("getNotif", (data) => {

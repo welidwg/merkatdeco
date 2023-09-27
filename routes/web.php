@@ -4,10 +4,12 @@ use App\Events\SendNotification;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\DeliveryStatusController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\GovernorateController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderCategoryController;
 use App\Http\Controllers\OrderController;
@@ -52,9 +54,17 @@ Route::get('/csrf', function () {
 Route::group(["middleware" => ["auth"]], function () {
     Route::get('/main', function () {
         return view('pages.main');
-    })->name("main");;
+    })->name("main");
 
+    Route::get('/chats/content/{user}/{chat_id}', function ($user, $chat_id) {
+        return view('chats.content', compact("user", "chat_id"));
+    })->name("chats.content");
+    Route::get('/chats/empty', function () {
+        return view('chats.empty');
+    })->name("chats.empty");
     //dashboard
+    Route::resource("chats", ChatController::class);
+    Route::resource("messages", MessageController::class);
     Route::get("/tools", function () {
         return view("pages.tools");
     })->name("tools.main");

@@ -83,7 +83,14 @@
 
                 </li>
             @endif
+            <li class="nav-item">
+                <a class="nav-link  
+                     {{ Route::currentRouteName() == 'chats.index' ? 'active' : '' }}
+                     "
+                    href="{{ route('chats.index') }}">
+                    <i class="fab fa-facebook-messenger"></i><span>Messagerie</span></a>
 
+            </li>
         </ul>
         {{-- <div class="text-center d-none d-md-inline">
             <button id="sidebarToggle" class="btn rounded-circle border-0" type="button"></button>

@@ -1,6 +1,7 @@
  @php
      use App\Models\Account;
      use App\Models\Chat;
+     use Illuminate\Support\Facades\Crypt;
      
      $user = Account::find($user);
      $chat = Chat::find($chat_id);
@@ -15,8 +16,8 @@
                      <div class="d-flex align-items-center">
                          <span class="chat-icon"><img class="img-fluid"
                                  src="https://mehedihtml.com/chatbox/assets/img/arroleftt.svg" alt="image title"></span>
-                         <div class="flex-shrink-0">
-                             <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png"
+                         <div class="flex-shrink-0 ">
+                             <img class="img-fluid rounded-circle" src="https://source.unsplash.com/50x50/?avatar"
                                  alt="user img">
                          </div>
                          <div class="flex-grow-1 ms-3">
@@ -86,7 +87,7 @@
 
                          @if ($show)
                              <div class="divider">
-                                 <h6> {{ $message->created_at }} </h6>
+                                 <h6> {{ date('Y-m-d', strtotime($message->created_at)) }} </h6>
                              </div>
 
 
@@ -97,7 +98,7 @@
 
                          @if ($dt === $date && $today)
                              <div class="divider">
-                                 <h6>Aujourd'hui</h6>
+                                 <h6 class="fs-sm" style="font-size: 12px">Aujourd'hui</h6>
                              </div>
                              @php
                                  $today = false;
@@ -109,7 +110,7 @@
                          @endphp
 
                          <li class="{{ $class }}">
-                             <p> {{ $message->content }} </p>
+                             <p> {{ Crypt::decryptString($message->content) }} </p>
                              <span class="time">{{ date('H:i a', strtotime($message->created_at)) }} </span>
                          </li>
                          {{-- <li class="sender">
@@ -141,14 +142,25 @@
                  <input type="hidden" name="user_id" value={{ Auth::id() }}>
                  <input type="hidden" name="chat_id" value={{ $chat_id }}>
                  <input type="hidden" name="receiver_id" value={{ $user->id }}>
-                 <button type="submit" class="text-size-md"><i class="fa fa-paper-plane" aria-hidden="true"></i>
-                     Envoyer</button>
+                 <button type="submit" class="text-size-md">
+                     <i class="fa fa-paper-plane" aria-hidden="true" id="icon-normal"></i>
+                     <div class="spinner-border text-light spinner-border-sm" role="status" id="spinner-send"
+                         style="display: none">
+                         <span class="visually-hidden">Loading...</span>
+                     </div>
+                     Envoyer
+
+                 </button>
              </form>
              <script>
                  $("#sendForm").on("submit", (e) => {
+                     $("#icon-normal").fadeOut();
+                     $("#spinner-send").fadeIn();
                      e.preventDefault();
                      axios.post(e.target.action, $("#sendForm").serialize())
                          .then(res => {
+                             $("#icon-normal").fadeIn();
+                             $("#spinner-send").fadeOut();
                              console.log(res)
                              $("#message").val("")
                              let user = parseInt("{{ $user->id }}");
@@ -162,6 +174,8 @@
                              $("#chatbox").load(routeUrl)
                          })
                          .catch(err => {
+                             $("#icon-normal").fadeIn();
+                             $("#spinner-send").fadeOut();
                              console.error(err);
                          })
                  })

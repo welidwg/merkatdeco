@@ -6,6 +6,7 @@ use App\Events\Message as EventsMessage;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class MessageController extends Controller
 {
@@ -39,7 +40,9 @@ class MessageController extends Controller
     {
         //
         try {
-            $message = Message::create($request->all());
+            $data = $request->all();
+            $data['content'] = Crypt::encryptString($request->content);
+            $message = Message::create($data);
             if ($message) {
                 $rec = $request->receiver_id;
                 $chat_id = $request->chat_id;
